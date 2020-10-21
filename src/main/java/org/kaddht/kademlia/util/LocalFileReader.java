@@ -25,8 +25,10 @@ public class LocalFileReader {
 
             while ((line=reader.readLine())!=null) {
                 content += line;
+                content += "\n";//手动添加换行
             }
-            txt = new Gson().toJson(new TxtFile(txtname,content));
+            reader.close();
+            txt = new Gson().toJson(new TxtFile(filename,content));
         }catch (IOException e){
 
         }

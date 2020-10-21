@@ -16,6 +16,11 @@ public class DHTContentImpl implements KadContent
     public static final transient String TYPE = "DHTContentImpl";
 
     private KademliaId key;
+
+    public String getData() {
+        return data;
+    }
+
     private String data;
     private String ownerId;
     private final long createTs;

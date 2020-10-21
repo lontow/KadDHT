@@ -13,6 +13,7 @@ import org.kaddht.kademlia.JKademliaNode;
 import org.kaddht.kademlia.dht.JKademliaStorageEntry;
 import org.kaddht.kademlia.simulations.DHTContentImpl;
 import org.kaddht.kademlia.util.LocalFileReader;
+import org.kaddht.kademlia.util.LocalFileWriter;
 
 
 class Exit extends Exec{
@@ -79,7 +80,8 @@ class Get extends Exec{
         if(key==null) return;
         try {
             JKademliaStorageEntry entry=kad.get(key);
-            new DHTContentImpl().fromSerializedForm(entry.getContent());
+            String content= new DHTContentImpl().fromSerializedForm(entry.getContent()).getData();
+            LocalFileWriter.write(content);
         }catch (Exception e) {
         }
     }
@@ -96,7 +98,7 @@ class Get extends Exec{
             usage();
             return;
         }
-        key=LocalFileReader.read(args[1]);
+        key=args[1];
     }
 
 
