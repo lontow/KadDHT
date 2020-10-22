@@ -5,8 +5,7 @@
    1. 配置 `resources/config.json` 文件，此文件可根据 `defconfig.json`　新建。  
    2. ```java -jar KadDHT.jar -config config.json```
    
-    运行成功后，会进入一个交互 `shell` 中。开头显示***ip:port***，***kadid***
-    以便其他节点可通过其加入网络。***default directory***指出程序存放数据，文件的目录ｉ
+   运行成功后，会进入一个交互 `shell` 中。开头显示***ip:port***，***kadid*** 以便其他节点可通过其加入网络。***default directory***指出程序存放数据，文件的目录ｉ
     
     
 #### 命令使用
