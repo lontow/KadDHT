@@ -23,7 +23,9 @@ public class Command{
         commands.put(name, exec);
     }
     public static void parse(String line,JKademliaNode kad) {
-        if(line.equals("")) return;
+        if(line.equals("")) {
+            return;
+        }
         String[] args=Pattern.compile(" ").split(line);
         Exec exec=commands.get(args[0]).setKad(kad);
         exec.setArgs(args);
