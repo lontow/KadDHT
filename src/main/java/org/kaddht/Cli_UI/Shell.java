@@ -11,7 +11,7 @@ import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 import org.kaddht.kademlia.JKademliaNode;
 import org.kaddht.kademlia.dht.JKademliaStorageEntry;
-import org.kaddht.kademlia.simulations.DHTContentImpl;
+import org.kaddht.kademlia.dht.DHTContentImpl;
 import org.kaddht.kademlia.util.LocalFileReader;
 import org.kaddht.kademlia.util.LocalFileWriter;
 

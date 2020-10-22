@@ -1,7 +1,9 @@
-package org.kaddht.kademlia.simulations;
+package tests;
 
 import java.io.IOException;
 import java.util.UUID;
+
+import org.kaddht.kademlia.dht.DHTContentImpl;
 import org.kaddht.kademlia.dht.GetParameter;
 import org.kaddht.kademlia.JKademliaNode;
 import org.kaddht.kademlia.dht.KademliaStorageEntry;

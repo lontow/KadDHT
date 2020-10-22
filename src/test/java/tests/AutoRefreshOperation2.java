@@ -1,10 +1,11 @@
-package org.kaddht.kademlia.simulations;
+package tests;
 
 import java.util.Timer;
 import java.util.TimerTask;
 import org.kaddht.kademlia.DefaultConfiguration;
 import org.kaddht.kademlia.JKademliaNode;
 import org.kaddht.kademlia.KadConfiguration;
+import org.kaddht.kademlia.dht.DHTContentImpl;
 import org.kaddht.kademlia.node.KademliaId;
 
 /**

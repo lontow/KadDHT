@@ -1,7 +1,6 @@
-package org.kaddht.kademlia.simulations;
+package org.kaddht.kademlia.dht;
 
 import com.google.gson.Gson;
-import org.kaddht.kademlia.dht.KadContent;
 import org.kaddht.kademlia.node.KademliaId;
 
 /**

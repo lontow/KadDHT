@@ -1,4 +1,4 @@
-package org.kaddht.kademlia.simulations;
+package tests;
 
 /**
  * A class that specifies the structure for simulations.

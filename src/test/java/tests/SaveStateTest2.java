@@ -1,6 +1,7 @@
-package org.kaddht.kademlia.simulations;
+package tests;
 
 import org.kaddht.kademlia.JKademliaNode;
+import org.kaddht.kademlia.dht.DHTContentImpl;
 import org.kaddht.kademlia.dht.GetParameter;
 import org.kaddht.kademlia.dht.KademliaStorageEntry;
 import org.kaddht.kademlia.node.KademliaId;

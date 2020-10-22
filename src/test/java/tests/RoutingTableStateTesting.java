@@ -1,8 +1,9 @@
-package org.kaddht.kademlia.simulations;
+package tests;
 
 import java.io.IOException;
 import java.util.Scanner;
 import org.kaddht.kademlia.JKademliaNode;
+import org.kaddht.kademlia.dht.DHTContentImpl;
 import org.kaddht.kademlia.dht.KadContent;
 import org.kaddht.kademlia.node.KademliaId;
 

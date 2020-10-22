@@ -10,7 +10,7 @@ import org.kaddht.kademlia.dht.KademliaStorageEntry;
 import org.kaddht.kademlia.exceptions.ContentNotFoundException;
 import org.kaddht.kademlia.node.KademliaId;
 import org.kaddht.kademlia.node.Node;
-import org.kaddht.kademlia.simulations.DHTContentImpl;
+import org.kaddht.kademlia.dht.DHTContentImpl;
 
 public class NodeConnectFromRemote {
 public static void main(String[] args) throws IOException, NoSuchElementException, ContentNotFoundException {
