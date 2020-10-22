@@ -1,13 +1,13 @@
 {
   "tracker":{
 
-    "address":"192.168.122.173",
-    "kadid":"ASERTK85OLKMN85FR455",
-    "udpport":7900
+    "address":"192.168.85.101",
+    "kadid":"ASF45678947584567434",
+    "udpport":9999
   },
   "localnode":{
-    "kadid":"ASF45678947584567434",
-    "ownerid":"lontow",
-    "udpport":9999
+    "kadid":"ASERTK85OLKMN85FR455",
+    "ownerid":"zwl",
+    "udpport":7900
   }
 }
