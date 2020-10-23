@@ -23,7 +23,7 @@ public class GetParameter
     private String ownerId = null;
 
     /**
-     * Construct a GetParameter to search for data by NodeId and owner
+     * Construct a GetParameter to search for data by NodeId and type
      *
      * @param key
      * @param type

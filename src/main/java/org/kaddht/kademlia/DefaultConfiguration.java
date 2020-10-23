@@ -27,8 +27,7 @@ public class DefaultConfiguration implements KadConfiguration
     private   int STALE = 1;
     @SerializedName("default_folder")
     private   String LOCAL_FOLDER = "test";
-    public   String dirPath=System.getProperty("user.home") + File.separator + LOCAL_FOLDER;
-    
+
     private final static boolean IS_TESTING = true;
     private static DefaultConfiguration config=null;
     public static synchronized DefaultConfiguration getInstance(){
@@ -92,7 +91,7 @@ public class DefaultConfiguration implements KadConfiguration
     public String getNodeDataFolder(String ownerId)
     {
         /* Setup the main storage folder if it doesn't exist */
-        String path = System.getProperty("user.home") + File.separator + LOCAL_FOLDER;
+        String path = System.getProperty("user.home") + File.separator + getLOCAL_FOLDER();
         File folder = new File(path);
         if (!folder.isDirectory())
         {
@@ -150,7 +149,7 @@ public class DefaultConfiguration implements KadConfiguration
     }
 
     public String getDirPath() {
-        return dirPath;
+        return System.getProperty("user.home") + File.separator + LOCAL_FOLDER;
     }
 
     public static boolean isIsTesting() {
@@ -168,7 +167,7 @@ public class DefaultConfiguration implements KadConfiguration
                 ", RCSIZE=" + RCSIZE +
                 ", STALE=" + STALE +
                 ", LOCAL_FOLDER='" + LOCAL_FOLDER + '\'' +
-                ", dirPath='" + dirPath + '\'' +
+                ", "+ '\'' +
                 ", IS_TESTING=" + IS_TESTING +
                 '}';
     }

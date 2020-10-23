@@ -42,7 +42,8 @@ public interface KademliaDHT
      *
      * @param content The DHT content to store
      *
-     * @return boolean true if we stored the content, false if the content already exists and is up to date
+     * @return boolean true if we stored the content, false if the content already
+     *          exists and is up to date
      *
      * @throws java.io.IOException
      */

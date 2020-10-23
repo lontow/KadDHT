@@ -19,7 +19,7 @@ public class StorageEntryMetadata implements KademliaStorageEntryMetadata
     private final int contentHash;
     private final long updatedTs;
 
-    /* This value is the last time this content was last updated from the network */
+    /** This value is the last time this content was last updated from the network*/
     private long lastRepublished;
 
     public StorageEntryMetadata(KadContent content)

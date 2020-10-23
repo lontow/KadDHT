@@ -24,6 +24,7 @@ class Exit extends Exec{
         System.exit(0);
     }
 
+    @Override
     public void usage() {
         // TODO Auto-generated method stub
         System.out.println("exit");
@@ -54,6 +55,7 @@ class Put extends Exec{
     }
 
 
+    @Override
     public void usage() {
         // TODO Auto-generated method stub
         System.out.println("put <filename>");
@@ -87,6 +89,7 @@ class Get extends Exec{
     }
 
 
+    @Override
     public void usage() {
         // TODO Auto-generated method stub
         System.out.println("get <key>");
@@ -112,6 +115,7 @@ class ShowRoute extends Exec{
     }
 
 
+    @Override
     public void usage() {
         // TODO Auto-generated method stub
         System.out.println("showroute");
