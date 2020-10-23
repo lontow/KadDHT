@@ -67,10 +67,10 @@ public class RouteLengthChecker
             this.maxRouteLength = inputSetRL;
         }
 
-        /* Add the nodes to our set */
+
         for (Node n : inputSet)
         {
-            /* We only add if the node is not already there... */
+
             if (!this.nodes.containsKey(n))
             {
                 this.nodes.put(n, inputSetRL);
@@ -78,13 +78,7 @@ public class RouteLengthChecker
         }
     }
 
-    /**
-     * Get the route length of the operation!
-     *
-     * It will be the max route length of all the nodes here.
-     *
-     * @return The route length
-     */
+
     public int getRouteLength()
     {
         return this.maxRouteLength;

@@ -6,7 +6,7 @@ import org.kaddht.kademlia.node.Node;
 import org.kaddht.kademlia.node.KademliaId;
 
 /**
- * Specification for Kademlia's Routing Table
+ * 路由表结构
  *
  * @author Lontow
  * @since 20201020
@@ -15,74 +15,43 @@ public interface KademliaRoutingTable
 {
 
     /**
-     * Initialize the RoutingTable to it's default state
+     * 初始化
      */
     public void initialize();
 
-    /**
-     * Sets the configuration file for this routing table
-     *
-     * @param config
-     */
+
     public void setConfiguration(KadConfiguration config);
 
-    /**
-     * Adds a contact to the routing table based on how far it is from the LocalNode.
-     *
-     * @param c The contact to add
-     */
+
     public void insert(Contact c);
 
-    /**
-     * Adds a node to the routing table based on how far it is from the LocalNode.
-     *
-     * @param n The node to add
-     */
+
     public void insert(Node n);
 
     /**
-     * Compute the bucket ID in which a given node should be placed; the bucketId is computed based on how far the node is away from the Local Node.
-     *
-     * @param nid The NodeId for which we want to find which bucket it belong to
-     *
-     * @return Integer The bucket ID in which the given node should be placed.
+     * 计算　Node 应该放到那个　Bucket中
      */
     public int getBucketId(KademliaId nid);
 
-    /**
-     * Find the closest set of contacts to a given NodeId
-     *
-     * @param target           The NodeId to find contacts close to
-     * @param numNodesRequired The number of contacts to find
-     *
-     * @return List A List of contacts closest to target
-     */
+
     public List<Node> findClosest(KademliaId target, int numNodesRequired);
 
-    /**
-     * @return List A List of all Nodes in this RoutingTable
-     */
+
     public List getAllNodes();
 
-    /**
-     * @return List A List of all Nodes in this RoutingTable
-     */
+
     public List getAllContacts();
 
-    /**
-     * @return Bucket[] The buckets in this Kad Instance
-     */
+
     public KademliaBucket[] getBuckets();
 
     /**
-     * Method used by operations to notify the routing table of any contacts that have been unresponsive.
-     *
-     * @param contacts The set of unresponsive contacts
+     * 将Contact 标记为无响应
      */
     public void setUnresponsiveContacts(List<Node> contacts);
 
     /**
-     * Method used by operations to notify the routing table of any contacts that have been unresponsive.
+     * 将　Node 标记为无响应
      *
      * @param n
      */

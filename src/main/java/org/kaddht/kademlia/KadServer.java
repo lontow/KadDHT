@@ -21,7 +21,7 @@ import org.kaddht.kademlia.node.Node;
 import org.kaddht.kademlia.message.Receiver;
 
 /**
- * The server that handles sending and receiving messages between nodes on the Kad Network
+ * 收发　message
  *
  * @author Lontow
  * @created 20140215
@@ -29,22 +29,22 @@ import org.kaddht.kademlia.message.Receiver;
 public class KadServer
 {
 
-    /* Maximum size of a Datagram Packet */
+    /* 数据包最大字节数 */
     private static final int DATAGRAM_BUFFER_SIZE = 64 * 1024;      // 64KB
 
-    /* Basic Kad Objects */
+
     private final transient KadConfiguration config;
 
-    /* Server Objects */
-    private final DatagramSocket socket;
+
+    private final DatagramSocket socket;//UDP
     private transient boolean isRunning;
     private final Map<Integer, Receiver> receivers;
-    private final Timer timer;      // Schedule future tasks
-    private final Map<Integer, TimerTask> tasks;    // Keep track of scheduled tasks
+    private final Timer timer;      // 调度器
+    private final Map<Integer, TimerTask> tasks;    //
 
     private final Node localNode;
 
-    /* Factories */
+
     private final KademliaMessageFactory messageFactory;
 
     private final Statistician statistician;
@@ -58,13 +58,13 @@ public class KadServer
     }
 
     /**
-     * Initialize our KadServer
+     * 初始化
      *
-     * @param udpPort      The port to listen on
-     * @param mFactory     Factory used to create messages
-     * @param localNode    Local node on which this server runs on
+     * @param udpPort      端口
+     * @param mFactory     消息工厂
+     * @param localNode    本地Node
      * @param config
-     * @param statistician A statistician to manage the server statistics
+     * @param statistician 统计信息
      *
      * @throws java.net.SocketException
      */
@@ -76,13 +76,11 @@ public class KadServer
         this.messageFactory = mFactory;
         this.statistician = statistician;
 
-        /* Start listening for incoming requests in a new thread */
+
         this.startListener();
     }
 
-    /**
-     * Starts the listener to listen for incoming messages
-     */
+
     private void startListener()
     {
         new Thread()
@@ -96,13 +94,13 @@ public class KadServer
     }
 
     /**
-     * Sends a message
+     * 发送信息
      *
-     * @param msg  The message to send
-     * @param to   The node to send the message to
-     * @param recv The receiver to handle the response message
+     * @param msg  消息
+     * @param to   目的地
+     * @param recv 接受器
      *
-     * @return Integer The communication ID of this message
+     * @return commuicationID
      *
      * @throws IOException
      * @throws org.kaddht.kademlia.exceptions.KadServerDownException
@@ -114,15 +112,15 @@ public class KadServer
             throw new KadServerDownException(this.localNode + " - Kad Server is not running.");
         }
 
-        /* Generate a random communication ID */
+        /* 随机 communication ID */
         int comm = new Random().nextInt();
 
-        /* If we have a receiver */
+        /* 接受 */
         if (recv != null)
         {
             try
             {
-                /* Setup the receiver to handle message response */
+                /* 设置回复 */
                 receivers.put(comm, recv);
                 TimerTask task = new TimeoutTask(comm, recv);
                 timer.schedule(task, this.config.responseTimeout());
@@ -130,22 +128,22 @@ public class KadServer
             }
             catch (IllegalStateException ex)
             {
-                /* The timer is already cancelled so we cannot do anything here really */
+
             }
         }
 
-        /* Send the message */
+
         sendMessage(to, msg, comm);
 
         return comm;
     }
 
     /**
-     * Method called to reply to a message received
+     * 回复
      *
-     * @param to   The Node to send the reply to
-     * @param msg  The reply message
-     * @param comm The communication ID - the one received
+     * @param to   目的节点
+     * @param msg  消息
+     * @param comm commucationID
      *
      * @throws java.io.IOException
      */
@@ -158,15 +156,12 @@ public class KadServer
         sendMessage(to, msg, comm);
     }
 
-    /**
-     * Internal sendMessage method called by the public sendMessage method after a communicationId is generated
-     */
+
     private void sendMessage(Node to, Message msg, int comm) throws IOException
     {
-        /* Use a try-with resource to auto-close streams after usage */
         try (ByteArrayOutputStream bout = new ByteArrayOutputStream(); DataOutputStream dout = new DataOutputStream(bout);)
         {
-            /* Setup the message for transmission */
+
             dout.writeInt(comm);
             dout.writeByte(msg.code());
             msg.toStream(dout);
@@ -179,18 +174,18 @@ public class KadServer
                 throw new IOException("Message is too big");
             }
 
-            /* Everything is good, now create the packet and send it */
+            /* 创建包并发送*/
             DatagramPacket pkt = new DatagramPacket(data, 0, data.length);
             pkt.setSocketAddress(to.getSocketAddress());
             socket.send(pkt);
 
-            /* Lets inform the statistician that we've sent some data */
+            /* 统计信息 */
             this.statistician.sentData(data.length);
         }
     }
 
     /**
-     * Listen for incoming messages in a separate thread
+     * 监听
      */
     private void listen()
     {
@@ -200,19 +195,18 @@ public class KadServer
             {
                 try
                 {
-                    /* Wait for a packet */
+
                     byte[] buffer = new byte[DATAGRAM_BUFFER_SIZE];
                     DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                     socket.receive(packet);
 
-                    /* Lets inform the statistician that we've received some data */
+                    /* 统计信息*/
                     this.statistician.receivedData(packet.getLength());
 
                     if (this.config.isTesting())
                     {
                         /**
-                         * Simulating network latency
-                         * We pause for 1 millisecond/100 bytes
+                         * 模拟延迟
                          */
                         int pause = packet.getLength() / 100;
                         try
@@ -225,23 +219,21 @@ public class KadServer
                         }
                     }
 
-                    /* We've received a packet, now handle it */
+                    /* 收到包 */
                     try (ByteArrayInputStream bin = new ByteArrayInputStream(packet.getData(), packet.getOffset(), packet.getLength());
                             DataInputStream din = new DataInputStream(bin);)
                     {
 
-                        /* Read in the conversation Id to know which handler to handle this response */
+                        /* 获取会话ID */
                         int comm = din.readInt();
                         byte messCode = din.readByte();
 
                         Message msg = messageFactory.createMessage(messCode, din);
                         din.close();
 
-                        /* Get a receiver for this message */
                         Receiver receiver;
                         if (this.receivers.containsKey(comm))
                         {
-                            /* If there is a reciever in the receivers to handle this */
                             synchronized (this)
                             {
                                 receiver = this.receivers.remove(comm);
@@ -254,11 +246,9 @@ public class KadServer
                         }
                         else
                         {
-                            /* There is currently no receivers, try to get one */
                             receiver = messageFactory.createReceiver(messCode, this);
                         }
 
-                        /* Invoke the receiver */
                         if (receiver != null)
                         {
                             receiver.receive(msg, comm);
@@ -283,9 +273,9 @@ public class KadServer
     }
 
     /**
-     * Remove a conversation receiver
+     * 删除会话
      *
-     * @param comm The id of this conversation
+     * @param comm The id
      */
     private synchronized void unregister(int comm)
     {
@@ -293,9 +283,7 @@ public class KadServer
         this.tasks.remove(comm);
     }
 
-    /**
-     * Stops listening and shuts down the server
-     */
+
     public synchronized void shutdown()
     {
         this.isRunning = false;
@@ -304,10 +292,7 @@ public class KadServer
     }
 
     /**
-     * Task that gets called by a separate thread if a timeout for a receiver occurs.
-     * When a reply arrives this task must be canceled using the <code>cancel()</code>
-     * method inherited from <code>TimerTask</code>. In this case the caller is
-     * responsible for removing the task from the <code>tasks</code> map.
+     * 超时任务
      * */
     class TimeoutTask extends TimerTask
     {

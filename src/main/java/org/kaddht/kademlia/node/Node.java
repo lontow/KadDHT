@@ -9,7 +9,7 @@ import java.net.InetSocketAddress;
 import org.kaddht.kademlia.message.Streamable;
 
 /**
- * A Node in the Kademlia network - Contains basic node network information.
+ * Node 相关信息
  *
  * @author Lontow
  * @since 20201020
@@ -32,7 +32,7 @@ public class Node implements Streamable, Serializable
     }
 
     /**
-     * Load the Node's data from a DataInput stream
+     * 从输入流中创建　Node
      *
      * @param in
      *
@@ -45,25 +45,22 @@ public class Node implements Streamable, Serializable
     }
 
     /**
-     * Set the InetAddress of this node
+     * 设置　addr
      *
-     * @param addr The new InetAddress of this node
+     * @param addr The
      */
     public void setInetAddress(InetAddress addr)
     {
         this.inetAddress = addr;
     }
 
-    /**
-     * @return The NodeId object of this node
-     */
     public KademliaId getNodeId()
     {
         return this.nodeId;
     }
 
     /**
-     * Creates a SocketAddress for this node
+     * 创建　SocketAddress
      *
      * @return
      */
@@ -75,10 +72,9 @@ public class Node implements Streamable, Serializable
     @Override
     public void toStream(DataOutputStream out) throws IOException
     {
-        /* Add the NodeId to the stream */
         this.nodeId.toStream(out);
 
-        /* Add the Node's IP address to the stream */
+
         byte[] a = inetAddress.getAddress();
         if (a.length != 4)
         {
@@ -86,22 +82,20 @@ public class Node implements Streamable, Serializable
         }
         out.write(a);
 
-        /* Add the port to the stream */
         out.writeInt(port);
     }
 
     @Override
     public final void fromStream(DataInputStream in) throws IOException
     {
-        /* Load the NodeId */
+
         this.nodeId = new KademliaId(in);
 
-        /* Load the IP Address */
+
         byte[] ip = new byte[4];
         in.readFully(ip);
         this.inetAddress = InetAddress.getByAddress(ip);
 
-        /* Read in the port */
         this.port = in.readInt();
     }
 

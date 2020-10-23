@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.util.Comparator;
 
 /**
- * A Comparator to compare 2 keys to a given key
+ * 比较 NodeID
  *
  * @author Lontow
  * @since 20201020
@@ -15,7 +15,7 @@ public class KeyComparator implements Comparator<Node>
     private final BigInteger key;
 
     /**
-     * @param key The NodeId relative to which the distance should be measured.
+     * @param key 需要比较距离的 NodeID
      */
     public KeyComparator(KademliaId key)
     {
@@ -23,12 +23,10 @@ public class KeyComparator implements Comparator<Node>
     }
 
     /**
-     * Compare two objects which must both be of type <code>Node</code>
-     * and determine which is closest to the identifier specified in the
-     * constructor.
      *
-     * @param n1 Node 1 to compare distance from the key
-     * @param n2 Node 2 to compare distance from the key
+     *
+     * @param n1 Node 1
+     * @param n2 Node 2
      */
     @Override
     public int compare(Node n1, Node n2)

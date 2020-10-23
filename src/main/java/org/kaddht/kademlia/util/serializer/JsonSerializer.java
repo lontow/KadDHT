@@ -10,9 +10,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 /**
- * A KadSerializer that serializes content to JSON format
+ * 序列化为json
  *
- * @param <T> The type of content to serialize
+ * @param <T> 序列化对象
  *
  * @author Lontow
  *
@@ -35,10 +35,10 @@ public class JsonSerializer<T> implements KadSerializer<T>
         {
             writer.beginArray();
 
-            /* Store the content type */
+
             gson.toJson(data.getClass().getName(), String.class, writer);
 
-            /* Now Store the content */
+
             gson.toJson(data, data.getClass(), writer);
 
             writer.endArray();
@@ -53,10 +53,10 @@ public class JsonSerializer<T> implements KadSerializer<T>
         {
             reader.beginArray();
 
-            /* Read the class name */
+
             String className = gson.fromJson(reader, String.class);
 
-            /* Read and return the Content*/
+
             T ret = gson.fromJson(reader, Class.forName(className));
             
             reader.endArray();

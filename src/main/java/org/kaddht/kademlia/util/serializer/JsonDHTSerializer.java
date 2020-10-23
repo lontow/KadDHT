@@ -17,25 +17,7 @@ import org.kaddht.kademlia.dht.KademliaStorageEntryMetadata;
 import org.kaddht.kademlia.dht.StorageEntryMetadata;
 
 /**
- * A KadSerializer that serializes DHT to JSON format
- * The generic serializer is not working for DHT
- *
- * Why a DHT specific serializer?
- * The DHT structure:
- * - DHT
- * -- StorageEntriesManager
- * --- Map<NodeId, List<StorageEntry>>
- * ---- NodeId:KeyBytes
- * ---- List<StorageEntry>
- * ----- StorageEntry: Key, OwnerId, Type, Hash
- *
- * The above structure seems to be causing some problem for Gson, especially at the Map part.
- *
- * Solution
- * - Make the StorageEntriesManager transient
- * - Simply store all StorageEntry in the serialized object
- * - When reloading, re-add all StorageEntry to the DHT
- *
+ * DHT 序列化
  * @author Lontow
  *
  * @since 20201020
@@ -62,10 +44,9 @@ public class JsonDHTSerializer implements KadSerializer<KademliaDHT>
         {
             writer.beginArray();
 
-            /* Write the basic DHT */
+
             gson.toJson(data, DHT.class, writer);
 
-            /* Now Store the Entries  */
             gson.toJson(data.getStorageEntries(), this.storageEntriesCollectionType, writer);
 
             writer.endArray();
@@ -81,11 +62,11 @@ public class JsonDHTSerializer implements KadSerializer<KademliaDHT>
         {
             reader.beginArray();
 
-            /* Read the basic DHT */
+
             DHT dht = gson.fromJson(reader, DHT.class);
             dht.initialize();
 
-            /* Now get the entries and add them back to the DHT */
+
             List<KademliaStorageEntryMetadata> entries = gson.fromJson(reader, storageEntriesCollectionType);
             dht.putStorageEntries(entries);
 

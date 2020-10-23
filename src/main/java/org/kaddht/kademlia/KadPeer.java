@@ -36,22 +36,19 @@ import org.kaddht.kademlia.util.serializer.JsonRoutingTableSerializer;
 import org.kaddht.kademlia.util.serializer.JsonSerializer;
 
 /**
- * The main Kademlia Node on the network, this node manages everything for this local system.
+ * 网络上的节点
  *
  * @author Lontow
  * @since 20201020
- *
- * @todo When we receive a store message - if we have a newer version of the content, re-send this newer version to that node so as to update their version
- * @todo Handle IPv6 Addresses
  *
  */
 public class KadPeer implements KademliaNode
 {
 
-    /* Kademlia Attributes */
+
     private final String ownerId;
 
-    /* Objects to be used */
+
     private final transient Node localNode;
     private final transient KadServer server;
     private final transient KademliaDHT dht;
@@ -59,14 +56,12 @@ public class KadPeer implements KademliaNode
     private final int udpPort;
     private transient KadConfiguration config;
 
-    /* Timer used to execute refresh operations */
     private transient Timer refreshOperationTimer;
     private transient TimerTask refreshOperationTTask;
 
-    /* Factories */
     private final transient MessageFactory messageFactory;
 
-    /* Statistics */
+
     private final transient Statistician statistician;
 
     
@@ -74,23 +69,6 @@ public class KadPeer implements KademliaNode
         statistician = new Statistician();
     }
 
-    /**
-     * Creates a Kademlia DistributedMap using the specified name as filename base.
-     * If the id cannot be read from disk the specified defaultId is used.
-     * The instance is bootstraped to an existing network by specifying the
-     * address of a bootstrap node in the network.
-     *
-     * @param ownerId      The Name of this node used for storage
-     * @param localNode    The Local Node for this Kad instance
-     * @param udpPort      The UDP port to use for routing messages
-     * @param dht          The DHT for this instance
-     * @param config
-     * @param routingTable
-     *
-     * @throws IOException If an error occurred while reading id or local map
-     *                     from disk <i>or</i> a network error occurred while
-     *                     attempting to bootstrap to the network
-     * */
     public KadPeer(String ownerId, Node localNode, int udpPort, KademliaDHT dht, KademliaRoutingTable routingTable, KadConfiguration config) throws IOException
     {
         this.ownerId = ownerId;
@@ -115,7 +93,7 @@ public class KadPeer implements KademliaNode
             {
                 try
                 {
-                    /* Runs a DHT RefreshOperation  */
+
                     KadPeer.this.refresh();
                 }
                 catch (IOException e)
@@ -130,7 +108,7 @@ public class KadPeer implements KademliaNode
     @Override
     public final void stopRefreshOperation()
     {
-        /* Close off the timer tasks */
+
         this.refreshOperationTTask.cancel();
         this.refreshOperationTimer.cancel();
         this.refreshOperationTimer.purge();
@@ -170,11 +148,6 @@ public class KadPeer implements KademliaNode
     }
 
     /**
-     * Load Stored state using default configuration
-     *
-     * @param ownerId The ID of the owner for the stored state
-     *
-     * @return A Kademlia instance loaded from a stored state in a file
      *
      * @throws java.io.FileNotFoundException
      * @throws java.lang.ClassNotFoundException
@@ -183,15 +156,7 @@ public class KadPeer implements KademliaNode
     {
         return KadPeer.loadFromFile(ownerId, DefaultConfiguration.getInstance());
     }
-
-    /**
-     * Load Stored state
-     *
-     * @param ownerId The ID of the owner for the stored state
-     * @param iconfig Configuration information to work with
-     *
-     * @return A Kademlia instance loaded from a stored state in a file
-     *
+    /*
      * @throws java.io.FileNotFoundException
      * @throws java.lang.ClassNotFoundException
      */
@@ -199,27 +164,19 @@ public class KadPeer implements KademliaNode
     {
         DataInputStream din;
 
-        /**
-         * @section Read Basic Kad data
-         */
+
         din = new DataInputStream(new FileInputStream(getStateStorageFolderName(ownerId, iconfig) + File.separator + "kad.kns"));
         KadPeer ikad = new JsonSerializer<KadPeer>().read(din);
 
-        /**
-         * @section Read the routing table
-         */
+
         din = new DataInputStream(new FileInputStream(getStateStorageFolderName(ownerId, iconfig) + File.separator + "routingtable.kns"));
         KademliaRoutingTable irtbl = new JsonRoutingTableSerializer(iconfig).read(din);
 
-        /**
-         * @section Read the node state
-         */
+
         din = new DataInputStream(new FileInputStream(getStateStorageFolderName(ownerId, iconfig) + File.separator + "node.kns"));
         Node inode = new JsonSerializer<Node>().read(din);
 
-        /**
-         * @section Read the DHT
-         */
+
         din = new DataInputStream(new FileInputStream(getStateStorageFolderName(ownerId, iconfig) + File.separator + "dht.kns"));
         KademliaDHT idht = new JsonDHTSerializer().read(din);
         idht.setConfiguration(iconfig);
@@ -279,7 +236,7 @@ public class KadPeer implements KademliaNode
         sop.execute();
 
 
-        /* Return how many nodes the content was stored on */
+
         return sop.numNodesStoredAt();
     }
 
@@ -300,11 +257,10 @@ public class KadPeer implements KademliaNode
     {
         if (this.dht.contains(param))
         {
-            /* If the content exist in our own DHT, then return it. */
+           //本地有保存
             return this.dht.get(param);
         }
 
-        /* Seems like it doesn't exist in our DHT, get it from other Nodes */
         long startTime = System.nanoTime();
         ContentLookupOperation clo = new ContentLookupOperation(server, this, param, this.config);
         clo.execute();
@@ -334,15 +290,14 @@ public class KadPeer implements KademliaNode
     @Override
     public void shutdown(final boolean saveState) throws IOException
     {
-        /* Shut down the server */
         this.server.shutdown();
 
         this.stopRefreshOperation();
 
-        /* Save this Kademlia instance's state if required */
+        /* 保存 */
         if (saveState)
         {
-            /* Save the system state */
+
             this.saveKadState();
         }
     }
@@ -352,43 +307,27 @@ public class KadPeer implements KademliaNode
     {
         DataOutputStream dout;
 
-        /**
-         * @section Store Basic Kad data
-         */
+
         dout = new DataOutputStream(new FileOutputStream(getStateStorageFolderName(this.ownerId, this.config) + File.separator + "kad.kns"));
         System.out.println("path:"+getStateStorageFolderName(this.ownerId, this.config) + File.separator + "kad.kns");
         new JsonSerializer<KadPeer>().write(this, dout);
 
-        /**
-         * @section Save the node state
-         */
+        //保存节点信息
         dout = new DataOutputStream(new FileOutputStream(getStateStorageFolderName(this.ownerId, this.config) + File.separator + "node.kns"));
         new JsonSerializer<Node>().write(this.localNode, dout);
 
-        /**
-         * @section Save the routing table
-         * We need to save the routing table separate from the node since the routing table will contain the node and the node will contain the routing table
-         * This will cause a serialization recursion, and in turn a Stack Overflow
-         */
+        //保存路由表
         dout = new DataOutputStream(new FileOutputStream(getStateStorageFolderName(this.ownerId, this.config) + File.separator + "routingtable.kns"));
         new JsonRoutingTableSerializer(this.config).write(this.getRoutingTable(), dout);
-
-        /**
-         * @section Save the DHT
-         */
+        //保存DHT
         dout = new DataOutputStream(new FileOutputStream(getStateStorageFolderName(this.ownerId, this.config) + File.separator + "dht.kns"));
         new JsonDHTSerializer().write(this.dht, dout);
 
     }
 
-    /**
-     * Get the name of the folder for which a content should be stored
-     *
-     * @return String The name of the folder to store node states
-     */
+
     private static String getStateStorageFolderName(String ownerId, KadConfiguration iconfig)
     {
-        /* Setup the nodes storage folder if it doesn't exist */
         String path = iconfig.getNodeDataFolder(ownerId) + File.separator + "nodeState";
         File nodeStateFolder = new File(path);
         if (!nodeStateFolder.isDirectory())
@@ -410,11 +349,7 @@ public class KadPeer implements KademliaNode
         return this.statistician;
     }
 
-    /**
-     * Creates a string containing all data about this Kademlia instance
-     *
-     * @return The string representation of this Kad instance
-     */
+
     @Override
     public String toString()
     {

@@ -17,25 +17,7 @@ import org.kaddht.kademlia.routing.Contact;
 import org.kaddht.kademlia.routing.KademliaRoutingTable;
 
 /**
- * A KadSerializer that serializes routing tables to JSON format
- The generic serializer is not working for routing tables
-
- Why a KadRoutingTable specific serializer?
- The routing table structure:
- - KadRoutingTable
- -- Buckets[]
- --- Map<NodeId, Node>
- * ---- NodeId:KeyBytes
- * ---- Node: NodeId, InetAddress, Port
- *
- * The above structure seems to be causing some problem for Gson,
- * especially at the Map part.
- *
- * Solution
- - Make the Buckets[] transient
- - Simply store all Nodes in the serialized object
- - When reloading, re-add all nodes to the KadRoutingTable
- *
+ *Kad 序列化
  * @author Lontow
  *
  * @since 20201020
@@ -56,11 +38,7 @@ public class JsonRoutingTableSerializer implements KadSerializer<KademliaRouting
         gson = new Gson();
     }
 
-    /**
-     * Initialize the class
-     *
-     * @param config
-     */
+
     public JsonRoutingTableSerializer(KadConfiguration config)
     {
         this.config = config;
@@ -73,10 +51,9 @@ public class JsonRoutingTableSerializer implements KadSerializer<KademliaRouting
         {
             writer.beginArray();
 
-            /* Write the basic KadRoutingTable */
             gson.toJson(data, KadRoutingTable.class, writer);
 
-            /* Now Store the Contacts  */
+
             gson.toJson(data.getAllContacts(), contactCollectionType, writer);
 
             writer.endArray();
@@ -91,11 +68,11 @@ public class JsonRoutingTableSerializer implements KadSerializer<KademliaRouting
         {
             reader.beginArray();
 
-            /* Read the basic KadRoutingTable */
+
             KademliaRoutingTable tbl = gson.fromJson(reader, KadRoutingTable.class);
             tbl.setConfiguration(config);
             
-            /* Now get the Contacts and add them back to the KadRoutingTable */
+
             List<Contact> contacts = gson.fromJson(reader, contactCollectionType);
             tbl.initialize();
 
@@ -105,7 +82,6 @@ public class JsonRoutingTableSerializer implements KadSerializer<KademliaRouting
             }
 
             reader.endArray();
-            /* Read and return the Content*/
             return tbl;
         }
     }

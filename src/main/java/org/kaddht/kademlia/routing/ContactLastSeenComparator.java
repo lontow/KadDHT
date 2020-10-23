@@ -3,7 +3,7 @@ package org.kaddht.kademlia.routing;
 import java.util.Comparator;
 
 /**
- * A Comparator to compare 2 contacts by their last seen time
+ * 比较　lastSeenTime
  *
  * @author Lontow
  * @since 20201020
@@ -12,8 +12,7 @@ public class ContactLastSeenComparator implements Comparator<Contact>
 {
 
     /**
-     * Compare two contacts to determine their order in the Bucket,
-     * Contacts are ordered by their last seen timestamp.
+     *
      *
      * @param c1 Contact 1
      * @param c2 Contact 2
@@ -27,7 +26,7 @@ public class ContactLastSeenComparator implements Comparator<Contact>
         }
         else
         {
-            /* We may have 2 different contacts with same last seen values so we can't return 0 here */
+
             return c1.lastSeen() > c2.lastSeen() ? 1 : -1;
         }
     }

@@ -114,7 +114,7 @@ public class KademliaId implements Streamable, Serializable
      *
      * @param nid
      *
-     * @return
+     * @return　xor 后的KadID
      */
     public KademliaId xor(KademliaId nid)
     {

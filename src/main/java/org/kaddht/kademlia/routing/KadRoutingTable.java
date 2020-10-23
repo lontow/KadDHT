@@ -9,7 +9,7 @@ import org.kaddht.kademlia.node.Node;
 import org.kaddht.kademlia.node.KademliaId;
 
 /**
- * Implementation of a Kademlia routing table
+ *路由表实现
  *
  * @author Lontow
  * @created 20140215
@@ -17,7 +17,7 @@ import org.kaddht.kademlia.node.KademliaId;
 public class KadRoutingTable implements KademliaRoutingTable
 {
 
-    private final Node localNode;  // The current node
+    private final Node localNode;
     private transient KademliaBucket[] buckets;
 
     private transient KadConfiguration config;
@@ -27,15 +27,13 @@ public class KadRoutingTable implements KademliaRoutingTable
         this.localNode = localNode;
         this.config = config;
 
-        /* Initialize all of the buckets to a specific depth */
         this.initialize();
 
-        /* Insert the local node */
         this.insert(localNode);
     }
 
     /**
-     * Initialize the KadRoutingTable to it's default state
+     * 初始化
      */
     @Override
     public final void initialize()
@@ -54,9 +52,7 @@ public class KadRoutingTable implements KademliaRoutingTable
     }
 
     /**
-     * Adds a contact to the routing table based on how far it is from the LocalNode.
-     *
-     * @param c The contact to add
+     * 根据Contact 中的Node 到当前节点的距离插入
      */
     @Override
     public synchronized final void insert(Contact c)
@@ -64,41 +60,23 @@ public class KadRoutingTable implements KademliaRoutingTable
         this.buckets[this.getBucketId(c.getNode().getNodeId())].insert(c);
     }
 
-    /**
-     * Adds a node to the routing table based on how far it is from the LocalNode.
-     *
-     * @param n The node to add
-     */
     @Override
     public synchronized final void insert(Node n)
     {
         this.buckets[this.getBucketId(n.getNodeId())].insert(n);
     }
 
-    /**
-     * Compute the bucket ID in which a given node should be placed; the bucketId is computed based on how far the node is away from the Local Node.
-     *
-     * @param nid The NodeId for which we want to find which bucket it belong to
-     *
-     * @return Integer The bucket ID in which the given node should be placed.
-     */
+
     @Override
     public final int getBucketId(KademliaId nid)
     {
         int bId = this.localNode.getNodeId().getDistance(nid) - 1;
 
-        /* If we are trying to insert a node into it's own routing table, then the bucket ID will be -1, so let's just keep it in bucket 0 */
+        /* 将自身插入路由表，Id 为 -1.重置为０*/
         return bId < 0 ? 0 : bId;
     }
 
-    /**
-     * Find the closest set of contacts to a given NodeId
-     *
-     * @param target           The NodeId to find contacts close to
-     * @param numNodesRequired The number of contacts to find
-     *
-     * @return List A List of contacts closest to target
-     */
+
     @Override
     public synchronized final List<Node> findClosest(KademliaId target, int numNodesRequired)
     {
@@ -107,7 +85,6 @@ public class KadRoutingTable implements KademliaRoutingTable
 
         List<Node> closest = new ArrayList<>(numNodesRequired);
 
-        /* Now we have the sorted set, lets get the top numRequired */
         int count = 0;
         for (Node n : sortedSet)
         {
@@ -120,9 +97,7 @@ public class KadRoutingTable implements KademliaRoutingTable
         return closest;
     }
 
-    /**
-     * @return List A List of all Nodes in this KadRoutingTable
-     */
+
     @Override
     public synchronized final List<Node> getAllNodes()
     {
@@ -139,9 +114,7 @@ public class KadRoutingTable implements KademliaRoutingTable
         return nodes;
     }
 
-    /**
-     * @return List A List of all Nodes in this KadRoutingTable
-     */
+
     @Override
     public final List<Contact> getAllContacts()
     {
@@ -155,30 +128,20 @@ public class KadRoutingTable implements KademliaRoutingTable
         return contacts;
     }
 
-    /**
-     * @return Bucket[] The buckets in this Kad Instance
-     */
+
     @Override
     public final KademliaBucket[] getBuckets()
     {
         return this.buckets;
     }
 
-    /**
-     * Set the KadBuckets of this routing table, mainly used when retrieving saved state
-     *
-     * @param buckets
-     */
+
     public final void setBuckets(KademliaBucket[] buckets)
     {
         this.buckets = buckets;
     }
 
-    /**
-     * Method used by operations to notify the routing table of any contacts that have been unresponsive.
-     *
-     * @param contacts The set of unresponsive contacts
-     */
+
     @Override
     public void setUnresponsiveContacts(List<Node> contacts)
     {
@@ -192,17 +155,12 @@ public class KadRoutingTable implements KademliaRoutingTable
         }
     }
 
-    /**
-     * Method used by operations to notify the routing table of any contacts that have been unresponsive.
-     *
-     * @param n
-     */
+
     @Override
     public synchronized void setUnresponsiveContact(Node n)
     {
         int bucketId = this.getBucketId(n.getNodeId());
 
-        /* Remove the contact from the bucket */
         this.buckets[bucketId].removeNode(n);
     }
 

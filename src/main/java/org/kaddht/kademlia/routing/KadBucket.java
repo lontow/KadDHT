@@ -8,7 +8,7 @@ import org.kaddht.kademlia.KadConfiguration;
 import org.kaddht.kademlia.node.Node;
 
 /**
- * A bucket in the Kademlia routing table
+ *  路由表中　Bucket
  *
  * @author Lontow
  * @created 20201023
@@ -16,13 +16,13 @@ import org.kaddht.kademlia.node.Node;
 public class KadBucket implements KademliaBucket
 {
 
-    /* How deep is this bucket in the Routing Table */
+    /* 深度 */
     private final int depth;
 
-    /* Contacts stored in this routing table */
+    /* 存储 */
     private final TreeSet<Contact> contacts;
 
-    /* A set of last seen contacts that can replace any current contact that is unresponsive */
+    /* 缓存 */
     private final TreeSet<Contact> replacementCache;
 
     private final KadConfiguration config;
@@ -34,7 +34,7 @@ public class KadBucket implements KademliaBucket
     }
 
     /**
-     * @param depth  How deep in the routing tree is this bucket
+     * @param depth
      * @param config
      */
     public KadBucket(int depth, KadConfiguration config)
@@ -49,8 +49,7 @@ public class KadBucket implements KademliaBucket
         if (this.contacts.contains(c))
         {
             /**
-             * If the contact is already in the bucket, lets update that we've seen it
-             * We need to remove and re-add the contact to get the Sorted Set to update sort order
+             * 删除后，更新时间再重新加入。触发排序
              */
             Contact tmp = this.removeFromContacts(c.getNode());
             tmp.setSeenNow();
@@ -59,16 +58,16 @@ public class KadBucket implements KademliaBucket
         }
         else
         {
-            /* If the bucket is filled, so put the contacts in the replacement cache */
+            /* 若　Bucket 满了，放入缓存 */
             if (contacts.size() >= this.config.k())
             {
-                /* If the cache is empty, we check if any contacts are stale and replace the stalest one */
+                /* 查看过期时间最长的 */
                 Contact stalest = null;
                 for (Contact tmp : this.contacts)
                 {
                     if (tmp.staleCount() >= this.config.stale())
                     {
-                        /* Contact is stale */
+                        /* Contact 过期 */
                         if (stalest == null)
                         {
                             stalest = tmp;
@@ -80,7 +79,7 @@ public class KadBucket implements KademliaBucket
                     }
                 }
 
-                /* If we have a stale contact, remove it and add the new contact to the bucket */
+                /* 替换过期的 */
                 if (stalest != null)
                 {
                     this.contacts.remove(stalest);
@@ -88,7 +87,7 @@ public class KadBucket implements KademliaBucket
                 }
                 else
                 {
-                    /* No stale contact, lets insert this into replacement cache */
+                    /* 没过期的，加入缓存 */
                     this.insertIntoReplacementCache(c);
                 }
             }
@@ -120,16 +119,14 @@ public class KadBucket implements KademliaBucket
     @Override
     public synchronized boolean removeContact(Contact c)
     {
-        /* If the contact does not exist, then we failed to remove it */
         if (!this.contacts.contains(c))
         {
             return false;
         }
 
-        /* Contact exist, lets remove it only if our replacement cache has a replacement */
+        /* 缓存中有，删除 */
         if (!this.replacementCache.isEmpty())
         {
-            /* Replace the contact with one from the replacement cache */
             this.contacts.remove(c);
             Contact replacement = this.replacementCache.first();
             this.contacts.add(replacement);
@@ -137,7 +134,7 @@ public class KadBucket implements KademliaBucket
         }
         else
         {
-            /* There is no replacement, just increment the contact's stale count */
+            /* 缓存中无，记录过期 */
             this.getFromContacts(c.getNode()).incrementStaleCount();
         }
 

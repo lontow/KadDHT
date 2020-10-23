@@ -3,9 +3,7 @@ package org.kaddht.kademlia;
 import java.text.DecimalFormat;
 
 /**
- * Class that keeps statistics for this Kademlia instance.
- *
- * These statistics are temporary and will be lost when Kad is shut down.
+ * 实时统计信息
  *
  * @author Lontow
  * @since 20201020
@@ -13,14 +11,14 @@ import java.text.DecimalFormat;
 public class Statistician
 {
 
-    /* How much data was sent and received by the server over the network */
+
     private long totalDataSent, totalDataReceived;
     private long numDataSent, numDataReceived;
 
-    /* Bootstrap timings */
+
     private long bootstrapTime;
 
-    /* Content lookup operation timing & route length */
+
     private int numContentLookups, numFailedContentLookups;
     private long totalContentLookupTime;
     private long totalRouteLength;
