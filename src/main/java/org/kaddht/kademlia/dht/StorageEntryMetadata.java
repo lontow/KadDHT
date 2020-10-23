@@ -4,8 +4,7 @@ import java.util.Objects;
 import org.kaddht.kademlia.node.KademliaId;
 
 /**
- * Keeps track of data for a Content stored in the DHT
- * Used by the StorageEntryManager class
+ * 跟踪DHT中存储的内容的数据
  *
  * @author Lontow
  * @since 20201020
@@ -19,7 +18,6 @@ public class StorageEntryMetadata implements KademliaStorageEntryMetadata
     private final int contentHash;
     private final long updatedTs;
 
-    /** This value is the last time this content was last updated from the network*/
     private long lastRepublished;
 
     public StorageEntryMetadata(KadContent content)
@@ -61,8 +59,8 @@ public class StorageEntryMetadata implements KademliaStorageEntryMetadata
     }
 
     /**
-     * When a node is looking for content, he sends the search criteria in a GetParameter object
-     * Here we take this GetParameter object and check if this StorageEntry satisfies the given parameters
+     * 当节点在寻找内容时，将搜索条件封装在 GetParameter 对象中
+     * 在这里，我们使用此GetParameter对象并检查此StorageEntry是否满足给定参数
      *
      * @param params
      *
@@ -71,19 +69,19 @@ public class StorageEntryMetadata implements KademliaStorageEntryMetadata
 
     public boolean satisfiesParameters(GetParameter params)
     {
-        /* Check that owner id matches */
+        //检查 ownerId 是否满足
         if ((params.getOwnerId() != null) && (!params.getOwnerId().equals(this.ownerId)))
         {
             return false;
         }
 
-        /* Check that type matches */
+        //检查 type 是否满足
         if ((params.getType() != null) && (!params.getType().equals(this.type)))
         {
             return false;
         }
 
-        /* Check that key matches */
+        //检查 key 是否满足
         if ((params.getKey() != null) && (!params.getKey().equals(this.key)))
         {
             return false;
@@ -99,7 +97,7 @@ public class StorageEntryMetadata implements KademliaStorageEntryMetadata
     }
 
     /**
-     * Whenever we republish a content or get this content from the network, we update the last republished time
+     * 当我们重新上传内容或从网络获取此内容时，应更新时间
      */
 
     public void updateLastRepublished()

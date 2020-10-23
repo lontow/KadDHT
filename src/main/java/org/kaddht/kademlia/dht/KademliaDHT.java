@@ -10,6 +10,7 @@ import org.kaddht.kademlia.node.KademliaId;
 import org.kaddht.kademlia.util.serializer.KadSerializer;
 
 /**
+ * 管理整个DHT的主要 Distributed Hash Table 的接口
  * The main Distributed Hash Table interface that manages the entire DHT
  *
  * @author Lontow
@@ -19,31 +20,30 @@ public interface KademliaDHT
 {
 
     /**
-     * Initialize this DHT to it's default state
+     * 初始化分布式哈希表
      */
     public void initialize();
 
     /**
-     * Set a new configuration. Mainly used when we restore the DHT state from a file
+     * 设置配置文件
      *
      * @param con The new configuration file
      */
     public void setConfiguration(KadConfiguration con);
 
     /**
-     * Creates a new Serializer or returns an existing serializer
+     * 创建一个新的序列化器或返回一个现有的序列化器
      *
      * @return The new ContentSerializer
      */
     public KadSerializer<KadStorageEntry> getSerializer();
 
     /**
-     * Handle storing content locally
+     * 处理本地存储内容
      *
      * @param content The DHT content to store
      *
-     * @return boolean true if we stored the content, false if the content already
-     *          exists and is up to date
+     * @return 如果我们存储了新内容返回 true，否则返回 false
      *
      * @throws java.io.IOException
      */
@@ -52,7 +52,7 @@ public interface KademliaDHT
     public boolean store(KadContent content) throws IOException;
 
     /**
-     * Retrieves a Content from local storage
+     * 从本地存储中检索内容
      *
      * @param key      The Key of the content to retrieve
      * @param hashCode The hash code of the content to retrieve
@@ -65,18 +65,18 @@ public interface KademliaDHT
     public KadStorageEntry retrieve(KademliaId key, int hashCode) throws FileNotFoundException, IOException, ClassNotFoundException;
 
     /**
-     * Check if any content for the given criteria exists in this DHT
+     * 检查此DHT中是否存在给定条件的任何内容
      *
-     * @param param The content search criteria
+     * @param param 内容搜索条件
      *
-     * @return boolean Whether any content exist that satisfy the criteria
+     * @return 返回是否有满足搜索条件的内容
      */
     public boolean contains(GetParameter param);
 
     /**
-     * Retrieve and create a KadContent object given the StorageEntry object
+     * 对于的给定 StorageEntry 对象，检索并创建一个KadContent对象
      *
-     * @param entry The StorageEntry used to retrieve this content
+     * @param entry 用于检索此内容的StorageEntry
      *
      * @return KadContent The content object
      *
@@ -85,20 +85,20 @@ public interface KademliaDHT
     public KadStorageEntry get(KademliaStorageEntryMetadata entry) throws IOException, NoSuchElementException;
 
     /**
-     * Get the StorageEntry for the content if any exist.
+     * 内容如果存在，返回内容的StorageEntry
      *
-     * @param param The parameters used to filter the content needed
+     * @param param
      *
-     * @return KadContent A KadContent found on the DHT satisfying the given criteria
+     * @return 在DHT上找到的满足给定条件的KadContent
      *
      * @throws java.io.IOException
      */
     public KadStorageEntry get(GetParameter param) throws NoSuchElementException, IOException;
 
     /**
-     * Delete a content from local storage
+     * 从本地存储中删除一个内容
      *
-     * @param content The Content to Remove
+     * @param content 需要删除的内容
      *
      *
      * @throws org.kaddht.kademlia.exceptions.ContentNotFoundException
@@ -108,13 +108,13 @@ public interface KademliaDHT
     public void remove(KademliaStorageEntryMetadata entry) throws ContentNotFoundException;
 
     /**
-     * @return A List of all StorageEntries for this node
+     * @return 此节点的所有StorageEntries的列表
      */
     public List<KademliaStorageEntryMetadata> getStorageEntries();
 
     /**
-     * Used to add a list of storage entries for existing content to the DHT.
-     * Mainly used when retrieving StorageEntries from a saved state file.
+     * 用于将现有内容的存储条目列表添加到 DHT
+     * 主要在从已保存的状态文件中检索 StorageEntries 时使用
      *
      * @param ientries The entries to add
      */

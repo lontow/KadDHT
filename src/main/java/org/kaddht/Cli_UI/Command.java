@@ -1,5 +1,10 @@
 package org.kaddht.Cli_UI;
 
+/**
+ * @author 刘朕龙
+ * @create 2020-10-20
+ */
+
 import org.kaddht.kademlia.KadPeer;
 
 import java.util.HashMap;
@@ -26,7 +31,7 @@ public class Command{
         if(line.equals("")) {
             return;
         }
-        String[] args=Pattern.compile(" ").split(line);
+        String[] args = Pattern.compile(" ").split(line);
         Exec exec=commands.get(args[0]).setKad(kad);
         exec.setArgs(args);
         exec.run();

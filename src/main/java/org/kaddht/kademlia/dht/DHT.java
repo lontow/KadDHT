@@ -1,5 +1,7 @@
 package org.kaddht.kademlia.dht;
 
+
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -17,10 +19,10 @@ import org.kaddht.kademlia.util.serializer.JsonSerializer;
 import org.kaddht.kademlia.util.serializer.KadSerializer;
 
 /**
- * The main Distributed Hash Table class that manages the entire DHT
+ * 管理整个DHT的主要 Distributed Hash Table类
  *
- * @author Lontow
- * @since 20201020
+ * @author 刘朕龙
+ * @create 2020-10-16
  */
 public class DHT implements KademliaDHT
 {
@@ -64,22 +66,22 @@ public class DHT implements KademliaDHT
     @Override
     public boolean store(KadStorageEntry content) throws IOException
     {
-        /* Lets check if we have this content and it's the updated version */
+        // 检查一下是否有该内容，且是否为最新版本
         if (this.contentManager.contains(content.getContentMetadata()))
         {
             KademliaStorageEntryMetadata current = this.contentManager.get(content.getContentMetadata());
 
-            /* update the last republished time */
+            // 更新最新提交的时间
             current.updateLastRepublished();
 
             if (current.getLastUpdatedTimestamp() >= content.getContentMetadata().getLastUpdatedTimestamp())
             {
-                /* We have the current content, no need to update it! just leave this method now */
+                // 有该内容且为最新版本
                 return false;
             }
             else
             {
-                /* We have this content, but not the latest version, lets delete it so the new version will be added below */
+                // 具有改内容但不是最新版本，将其删除并添加新版本
                 try
                 {
                     //System.out.println("Removing older content to update it");
@@ -87,22 +89,21 @@ public class DHT implements KademliaDHT
                 }
                 catch (ContentNotFoundException ex)
                 {
-                    /* This won't ever happen at this point since we only get here if the content is found, lets ignore it  */
+                    // 该异常不会发生，因为只有具有内容时才会到达此处
                 }
             }
         }
 
         /**
-         * If we got here means we don't have this content, or we need to update the content
-         * If we need to update the content, the code above would've already deleted it, so we just need to re-add it
+         * 表明没有内容或者我们已经删除了它，下面将添加新内容
          */
         try
         {
             //System.out.println("Adding new content.");
-            /* Keep track of this content in the entries manager */
+            // 在条目管理器中跟踪改内容
             KademliaStorageEntryMetadata sEntry = this.contentManager.put(content.getContentMetadata());
 
-            /* Now we store the content locally in a file */
+            // 将内容存放在本地文件中
             String contentStorageFolder = this.getContentStorageFolderName(content.getContentMetadata().getKey());
 
             try (FileOutputStream fout = new FileOutputStream(contentStorageFolder + File.separator + sEntry.hashCode() + ".kct");
@@ -115,9 +116,7 @@ public class DHT implements KademliaDHT
         catch (ContentExistException e)
         {
             /**
-             * Content already exist on the DHT
-             * This won't happen because above takes care of removing the content if it's older and needs to be updated,
-             * or returning if we already have the current content version.
+             * 理论上不应该发生，因为如果存在旧文件已删除，存在最新文件则方法早已返回
              */
             return false;
         }
@@ -159,14 +158,14 @@ public class DHT implements KademliaDHT
             System.err.println("The class for some content was not found. Message: " + e.getMessage());
         }
 
-        /* If we got here, means we got no entries */
+        // 我们没有得到条目信息
         throw new NoSuchElementException();
     }
 
     @Override
     public KadStorageEntry get(GetParameter param) throws NoSuchElementException, IOException
     {
-        /* Load a KadContent if any exist for the given criteria */
+        // 条件成立则加载 KadContent
         try
         {
             KademliaStorageEntryMetadata e = this.contentManager.get(param);
@@ -181,7 +180,7 @@ public class DHT implements KademliaDHT
             System.err.println("The class for some content was not found. Message: " + e.getMessage());
         }
 
-        /* If we got here, means we got no entries */
+        // 没有得到条目信息
         throw new NoSuchElementException();
     }
 
@@ -210,7 +209,7 @@ public class DHT implements KademliaDHT
     }
 
     /**
-     * Get the name of the folder for which a content should be stored
+     * 获取存储文件夹的名称
      *
      * @param key The key of the content
      *
@@ -219,14 +218,14 @@ public class DHT implements KademliaDHT
     private String getContentStorageFolderName(KademliaId key)
     {
         /**
-         * Each content is stored in a folder named after the first 2 characters of the NodeId
+         * 每个内容都存储在以NodeId的前2个字符命名的文件夹中
          *
-         * The name of the file containing the content is the hash of this content
+         * 包含内容的文件的名称是该内容的哈希值
          */
         String folderName = key.hexRepresentation().substring(0, 2);
         File contentStorageFolder = new File(this.config.getNodeDataFolder(ownerId) + File.separator + folderName);
 
-        /* Create the content folder if it doesn't exist */
+        // 如果文件夹不存在则创造它
         if (!contentStorageFolder.isDirectory())
         {
             contentStorageFolder.mkdir();
@@ -252,7 +251,7 @@ public class DHT implements KademliaDHT
             }
             catch (ContentExistException ex)
             {
-                /* Entry already exist, no need to store it again */
+                // Entry 已存在
             }
         }
     }

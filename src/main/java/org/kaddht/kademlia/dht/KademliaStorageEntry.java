@@ -1,30 +1,30 @@
 package org.kaddht.kademlia.dht;
 
 /**
- * A StorageEntry interface for the storage entry class used to store a content on the DHT
+ * 用于在DHT上存储内容的存储条目类的StorageEntry接口
  *
- * @author Lontow
- * @since 20201020
+ * @author 张文令
+ * @since 20201023
  */
 public interface KademliaStorageEntry
 {
 
     /**
-     * Add the content to the storage entry
+     * 将内容添加到存储条目
      *
-     * @param data The content data in byte[] format
+     * @param data
      */
     public void setContent(final byte[] data);
 
     /**
-     * Get the content from this storage entry
+     * 从此存储条目获取内容
      *
      * @return The content in byte format
      */
     public byte[] getContent();
 
     /**
-     * Get the metadata for this storage entry
+     * 获取此存储条目的元数据
      *
      * @return the storage entry metadata
      */

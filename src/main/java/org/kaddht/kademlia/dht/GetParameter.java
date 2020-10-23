@@ -4,14 +4,11 @@ import com.google.gson.annotations.SerializedName;
 import org.kaddht.kademlia.node.KademliaId;
 
 /**
- * A GET request can get content based on Key, Owner, Type, etc
+ * GET请求可以基于键，所有者，类型等获取内容
+ * 该类包含上述的在GET请求中需要传递的参数
  *
- * This is a class containing the parameters to be passed in a GET request
- *
- * We use a class since the number of filtering parameters can change later
- *
- * @author Lontow
- * @since 20201020
+ * @author 刘朕龙
+ * @since 20201018
  */
 public class GetParameter
 {
@@ -23,7 +20,7 @@ public class GetParameter
     private String ownerId = null;
 
     /**
-     * Construct a GetParameter to search for data by NodeId and type
+     * 基于 NodeId 和 type 来寻找数据
      *
      * @param key
      * @param type
@@ -35,7 +32,7 @@ public class GetParameter
     }
 
     /**
-     * Construct a GetParameter to search for data by NodeId, owner, type
+     * 基于 NodeId, owner, type 来寻找数据
      *
      * @param key
      * @param type
@@ -48,7 +45,7 @@ public class GetParameter
     }
 
     /**
-     * Construct our get parameter from a Content
+     * 根据已有的内容来构建参数
      *
      * @param c
      */
@@ -68,7 +65,7 @@ public class GetParameter
     }
 
     /**
-     * Construct our get parameter from a StorageEntryMeta data
+     * 基于 StorageEntryMeta data 来构建参数
      *
      * @param md
      */
