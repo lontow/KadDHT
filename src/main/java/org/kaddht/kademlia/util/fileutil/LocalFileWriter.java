@@ -10,7 +10,7 @@ public class LocalFileWriter {
         System.out.println(content);
         TxtFile txtFile=new Gson().fromJson(content,TxtFile.class);
         try {
-            String txtname = DefaultConfiguration.dirPath+ File.separator+txtFile.filename;
+            String txtname = DefaultConfiguration.getInstance().getDirPath()+ File.separator+txtFile.filename;
             File file = new File(txtname);
             file.createNewFile();
             BufferedOutputStream fis = new BufferedOutputStream(new FileOutputStream(file));

@@ -34,7 +34,9 @@ public class Main {
             System.out.println("Created Node Kad : ");
             System.out.println( " \tat "+kad1.getNode().getSocketAddress());
             System.out.println( " \tkadid: "+kad1.getNode().getNodeId().getKadId());
-            System.out.println(" \tdefault directory:" + DefaultConfiguration.dirPath);
+            DefaultConfiguration.setConfig(config.system);
+            System.out.println(" \tdefault directory:" + DefaultConfiguration.getInstance().getDirPath());
+            System.out.println(config.system);
 
 
             if(config.tracker!=null){

@@ -17,8 +17,8 @@ public class LocalFileReader {
     public static String read(String filename)  {
         String line = "",content="",txt="";
         try {
-            String txtname =DefaultConfiguration.dirPath+File.separator+filename;
-            File file = new File(DefaultConfiguration.dirPath+File.separator+filename);
+            String txtname =DefaultConfiguration.getInstance().getDirPath()+File.separator+filename;
+            File file = new File(DefaultConfiguration.getInstance().getDirPath()+File.separator+filename);
             BufferedInputStream fis = new BufferedInputStream(new FileInputStream(file));
             BufferedReader reader = new BufferedReader(new InputStreamReader(fis, "utf-8"), 5 * 1024 * 1024);// 用5M的缓冲读取文本文件
 

@@ -9,5 +9,13 @@
     "kadid":"ASERTK8FGASDBFHFR455",
     "ownerid":"lzl",
     "udpport":9999
+  },
+  "system":{
+    "restore_interval": 60000,
+    "operation_timeout": 2000,
+    "response_timeout": 2000,
+    "rcsize": 3,
+    "default_folder": "kademlia",
+    "stale": 1
   }
 }
