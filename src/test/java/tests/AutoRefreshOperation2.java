@@ -14,7 +14,7 @@ import org.kaddht.kademlia.node.KademliaId;
  * @author Lontow
  * @since 20201020
  */
-public class AutoRefreshOperation2 implements Simulation
+public class AutoRefreshOperation2 implements tests.Simulation
 {
 
     @Override

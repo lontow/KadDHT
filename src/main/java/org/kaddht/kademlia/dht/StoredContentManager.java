@@ -10,12 +10,10 @@ import org.kaddht.kademlia.exceptions.ContentNotFoundException;
 import org.kaddht.kademlia.node.KademliaId;
 
 /**
- * It would be infeasible to keep all content in memory to be send when requested
- * Instead we store content into files
- * We use this Class to keep track of all content stored
+ * 将内容存储在本地文件中，用该类跟踪存储的所有内容
  *
- * @author Lontow
- * @since 20201020
+ * @author 张文令
+ * @since 20201018
  */
 class StoredContentManager
 {
@@ -28,9 +26,9 @@ class StoredContentManager
     }
 
     /**
-     * Add a new entry to our storage
+     * 在存储中加一个新条目
      *
-     * @param content The content to store a reference to
+     * @param content
      */
     public KademliaStorageEntryMetadata put(KadContent content) throws ContentExistException
     {
@@ -38,7 +36,7 @@ class StoredContentManager
     }
 
     /**
-     * Add a new entry to our storage
+     * 在存储中加一个新条目
      *
      * @param entry The StorageEntry to store
      */
@@ -48,7 +46,7 @@ class StoredContentManager
         {
             this.entries.put(entry.getKey(), new ArrayList<KademliaStorageEntryMetadata>());
         }
-        /* If this entry doesn't already exist, then we add it */
+        // 如果条目不存在，则添加它
         if (!this.contains(entry))
         {
             this.entries.get(entry.getKey()).add(entry);
@@ -62,9 +60,9 @@ class StoredContentManager
     }
 
     /**
-     * Checks if our DHT has a Content for the given criteria
+     * 检查我们的DHT是否具有给定条件的内容
      *
-     * @param param The parameters used to search for a content
+     * @param param 搜索条件
      *
      * @return boolean
      */
@@ -72,24 +70,21 @@ class StoredContentManager
     {
         if (this.entries.containsKey(param.getKey()))
         {
-            /* Content with this key exist, check if any match the rest of the search criteria */
+            // 检查剩余条件是否匹配
             for (KademliaStorageEntryMetadata e : this.entries.get(param.getKey()))
             {
-                /* If any entry satisfies the given parameters, return true */
+                // 如果所有条件都匹配
                 if (e.satisfiesParameters(param))
                 {
                     return true;
                 }
             }
         }
-        else
-        {
-        }
         return false;
     }
 
     /**
-     * Check if a content exist in the DHT
+     * 检查DHT中是否存在该内容
      */
     public synchronized boolean contains(KadContent content)
     {
@@ -97,7 +92,7 @@ class StoredContentManager
     }
 
     /**
-     * Check if a StorageEntry exist on this DHT
+     * 检查此DHT上是否存在StorageEntry
      */
     public synchronized boolean contains(KademliaStorageEntryMetadata entry)
     {
@@ -105,27 +100,26 @@ class StoredContentManager
     }
 
     /**
-     * Checks if our DHT has a Content for the given criteria
+     * 检查我们的DHT是否具有给定条件的内容
      *
-     * @param param The parameters used to search for a content
+     * @param param 用于搜索内容的参数
      *
-     * @return List of content for the specific search parameters
+     * @return 特定搜索参数的内容列表
      */
     public KademliaStorageEntryMetadata get(GetParameter param) throws NoSuchElementException
     {
         if (this.entries.containsKey(param.getKey()))
         {
-            /* Content with this key exist, check if any match the rest of the search criteria */
+            // 存在带有此关键字的内容，检查剩余搜索条件是否匹配
             for (KademliaStorageEntryMetadata e : this.entries.get(param.getKey()))
             {
-                /* If any entry satisfies the given parameters, return true */
+                // 如果存在条目满足给定参数，则返回true
                 if (e.satisfiesParameters(param))
                 {
                     return e;
                 }
             }
 
-            /* If we got here, means we didn't find any entry */
             throw new NoSuchElementException();
         }
         else
@@ -140,7 +134,7 @@ class StoredContentManager
     }
 
     /**
-     * @return A list of all storage entries
+     * @return 所有存储条目的列表
      */
     public synchronized List<KademliaStorageEntryMetadata> getAllEntries()
     {

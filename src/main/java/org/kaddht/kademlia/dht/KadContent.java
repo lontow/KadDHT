@@ -3,59 +3,34 @@ package org.kaddht.kademlia.dht;
 import org.kaddht.kademlia.node.KademliaId;
 
 /**
- * Any piece of content that needs to be stored on the DHT
+ * 任何需要存储在 DHT 上的内容
  *
- * @author Lontow
+ * @author 张文令
  *
- * @since 20201020
+ * @since 20201012
  */
 public interface KadContent
 {
 
-    /**
-     * @return NodeId The DHT key for this content
-     */
     public KademliaId getKey();
 
-    /**
-     * @return String The type of content
-     */
     public String getType();
 
-    /**
-     * Each content will have an created date
-     * This allows systems to know when to delete a content form his/her machine
-     *
-     * @return long The create date of this content
-     */
     public long getCreatedTimestamp();
 
-    /**
-     * Each content will have an update timestamp
-     * This allows the DHT to keep only the latest version of a content
-     *
-     * @return long The timestamp of when this content was last updated
-     */
     public long getLastUpdatedTimestamp();
 
-    /**
-     * @return The ID of the owner of this content
-     */
     public String getOwnerId();
 
     /**
-     * Each content needs to be in byte format for transporting and storage,
-     * this method takes care of that.
+     * 将内容进行序列化，只有序列化后的对象才能在网络传输
      *
-     * Each object is responsible for transforming itself to byte format since the
-     * structure of methods may differ.
-     *
-     * @return The content in byte format
+     * @return 序列化后的对象
      */
     public byte[] toSerializedForm();
 
     /**
-     * Given the Content in byte format, read it
+     * 进行反序列化
      *
      * @param data The object in byte format
      *

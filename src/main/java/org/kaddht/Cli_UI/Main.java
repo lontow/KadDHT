@@ -1,5 +1,10 @@
 package org.kaddht.Cli_UI;
 
+/**
+ * @author 刘朕龙
+ * @create 2020-10-20
+ */
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -47,7 +52,7 @@ public class Main {
                         config.tracker.udpport);
                 kad1.bootstrap(tracker);
                 System.out.println("Connected to tracker : " + tracker.getSocketAddress());
-                //System.out.println(kad1.getRoutingTable());
+                // 输出kad1.getRoutingTable()
             }
         } catch (IOException e) {
             if(e instanceof FileNotFoundException)
@@ -72,7 +77,7 @@ public class Main {
 
         CommandLineParser parser = new DefaultParser();
         try {
-            // parse the command line arguments
+            // 解析命令行参数
             CommandLine line = parser.parse( options, args );
             if(line.hasOption("help")){
                 HelpFormatter formatter = new HelpFormatter();
@@ -84,7 +89,6 @@ public class Main {
             }
         }
         catch( ParseException exp ) {
-            // oops, something went wrong
             System.err.println( "Parsing failed.  Reason: " + exp.getMessage() );
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp( "kadDHT", options ,true);

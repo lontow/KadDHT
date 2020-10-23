@@ -1,5 +1,10 @@
 package org.kaddht.Cli_UI;
 
+/**
+ * @author 刘朕龙
+ * @create 2020-10-20
+ */
+
 import java.io.IOException;
 
 
@@ -18,7 +23,7 @@ import org.kaddht.kademlia.util.fileutil.LocalFileWriter;
 
 class Exit extends Exec{
 
-
+    @Override
     public void run() {
         // TODO Auto-generated method stub
         System.exit(0);
@@ -42,9 +47,13 @@ class Exit extends Exec{
 class Put extends Exec{
 
     String content=null;
+
+    @Override
     public void run()  {
         // TODO Auto-generated method stub
-        if(content==null) return;
+        if(content==null) {
+            return;
+        }
         DHTContentImpl c = new DHTContentImpl(kad.getOwnerId(),content);
         try {
             kad.put(c);
@@ -77,9 +86,13 @@ class Put extends Exec{
 class Get extends Exec{
 
     private String key=null;
+
+    @Override
     public void run() {
         // TODO Auto-generated method stub
-        if(key==null) return;
+        if(key==null) {
+            return;
+        }
         try {
             KadStorageEntry entry=kad.get(key);
             String content= new DHTContentImpl().fromSerializedForm(entry.getContent()).getData();
@@ -109,6 +122,7 @@ class Get extends Exec{
 }
 class ShowRoute extends Exec{
 
+    @Override
     public void run() {
         // TODO Auto-generated method stub
         System.out.println(kad.getRoutingTable());

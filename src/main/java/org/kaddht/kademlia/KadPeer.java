@@ -165,7 +165,7 @@ public class KadPeer implements KademliaNode
                 ownerId,
                 new Node(defaultId, InetAddress.getLocalHost(), udpPort),
                 udpPort,
-                new DefaultConfiguration()
+                DefaultConfiguration.getInstance()
         );
     }
 
@@ -181,7 +181,7 @@ public class KadPeer implements KademliaNode
      */
     public static KadPeer loadFromFile(String ownerId) throws FileNotFoundException, IOException, ClassNotFoundException
     {
-        return KadPeer.loadFromFile(ownerId, new DefaultConfiguration());
+        return KadPeer.loadFromFile(ownerId, DefaultConfiguration.getInstance());
     }
 
     /**

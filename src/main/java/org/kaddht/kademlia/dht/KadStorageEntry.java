@@ -1,7 +1,7 @@
 package org.kaddht.kademlia.dht;
 
 /**
- * A KadStorageEntry class that is used to store a content on the DHT
+ * 用于在DHT上存储内容
  *
  * @author Lontow
  * @since 20201020

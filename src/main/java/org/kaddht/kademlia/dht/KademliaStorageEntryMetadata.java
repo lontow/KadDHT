@@ -3,43 +3,30 @@ package org.kaddht.kademlia.dht;
 import org.kaddht.kademlia.node.KademliaId;
 
 /**
- * Keeps track of data for a Content stored in the DHT
- * Used by the StorageEntryManager class
+ * 跟踪 DHT 中存储的内容的数据
+ * 便于StorageEntryManager类使用
  *
- * @author Lontow
- * @since 20201020
+ * @author 张文令
+ * @since 20201012
  */
 public interface KademliaStorageEntryMetadata
 {
 
-    /**
-     * @return The Kademlia ID of this content
-     */
     public KademliaId getKey();
 
-    /**
-     * @return The content's owner ID
-     */
     public String getOwnerId();
 
-    /**
-     * @return The type of this content
-     */
     public String getType();
 
-    /**
-     * @return A hash of the content
-     */
+
     public int getContentHash();
 
-    /**
-     * @return The last time this content was updated
-     */
+
     public long getLastUpdatedTimestamp();
 
     /**
-     * When a node is looking for content, he sends the search criteria in a GetParameter object
-     * Here we take this GetParameter object and check if this StorageEntry satisfies the given parameters
+     * 当节点正在寻找内容时，他在 GetParameter 对象中发送搜索条件
+     * 在这里，我们使用此GetParameter对象并检查此StorageEntry是否满足给定的参数
      *
      * @param params
      *
@@ -48,12 +35,12 @@ public interface KademliaStorageEntryMetadata
     public boolean satisfiesParameters(GetParameter params);
 
     /**
-     * @return The timestamp for the last time this content was republished
+     * @return 内容最后被更新的时间
      */
     public long lastRepublished();
 
     /**
-     * Whenever we republish a content or get this content from the network, we update the last republished time
+     * 当重新上传内容或从网络获取此内容时，应更新时间
      */
     public void updateLastRepublished();
 }

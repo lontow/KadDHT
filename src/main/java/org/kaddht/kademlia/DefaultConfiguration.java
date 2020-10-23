@@ -32,7 +32,7 @@ public class DefaultConfiguration implements KadConfiguration
     private static DefaultConfiguration config=null;
     public static synchronized DefaultConfiguration getInstance(){
         if(config==null){
-         //   config = new DefaultConfiguration();
+           config = new DefaultConfiguration();
         }
         return config;
 

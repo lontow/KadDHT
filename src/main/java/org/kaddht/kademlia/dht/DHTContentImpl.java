@@ -4,10 +4,10 @@ import com.google.gson.Gson;
 import org.kaddht.kademlia.node.KademliaId;
 
 /**
- * A simple DHT Content object to test DHT storage
+ * 一个简单的 DHT Content 对象，用于测试 DHT 存储
  *
- * @author Lontow
- * @since 20201020
+ * @author 刘朕龙
+ * @since 20201022
  */
 public class DHTContentImpl implements KadContent
 {
@@ -79,7 +79,7 @@ public class DHTContentImpl implements KadContent
     }
 
     /**
-     * Set the content as updated
+     * 将内容设置为已更新
      */
     public void setUpdated()
     {
