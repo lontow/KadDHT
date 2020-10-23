@@ -1,6 +1,6 @@
 package org.kaddht.kademlia.message;
 
-import org.kaddht.kademlia.dht.JKademliaStorageEntry;
+import org.kaddht.kademlia.dht.KadStorageEntry;
 import org.kaddht.kademlia.node.Node;
 import org.kaddht.kademlia.util.serializer.JsonSerializer;
 
@@ -19,7 +19,7 @@ public class ContentMessage implements Message
 
     public static final byte CODE = 0x04;
 
-    private JKademliaStorageEntry content;
+    private KadStorageEntry content;
     private Node origin;
 
     /**
@@ -27,7 +27,7 @@ public class ContentMessage implements Message
      * @param content The content to be stored
      *
      */
-    public ContentMessage(Node origin, JKademliaStorageEntry content)
+    public ContentMessage(Node origin, KadStorageEntry content)
     {
         this.content = content;
         this.origin = origin;
@@ -44,7 +44,7 @@ public class ContentMessage implements Message
         this.origin.toStream(out);
 
         /* Serialize the KadContent, then send it to the stream */
-        new JsonSerializer<JKademliaStorageEntry>().write(content, out);
+        new JsonSerializer<KadStorageEntry>().write(content, out);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class ContentMessage implements Message
 
         try
         {
-            this.content = new JsonSerializer<JKademliaStorageEntry>().read(in);
+            this.content = new JsonSerializer<KadStorageEntry>().read(in);
         }
         catch (ClassNotFoundException e)
         {
@@ -67,7 +67,7 @@ public class ContentMessage implements Message
         return this.origin;
     }
 
-    public JKademliaStorageEntry getContent()
+    public KadStorageEntry getContent()
     {
         return this.content;
     }

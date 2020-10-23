@@ -1,4 +1,4 @@
-package org.kaddht.kademlia.util;
+package org.kaddht.kademlia.util.fileutil;
 
 import com.google.gson.Gson;
 import org.kaddht.kademlia.DefaultConfiguration;

@@ -7,7 +7,7 @@ package org.kaddht.kademlia.operation;
 
 import org.kaddht.kademlia.message.Receiver;
 import java.io.IOException;
-import org.kaddht.kademlia.JKademliaNode;
+
 import org.kaddht.kademlia.KadConfiguration;
 import org.kaddht.kademlia.KadServer;
 import org.kaddht.kademlia.KademliaNode;

@@ -11,9 +11,9 @@ import org.kaddht.kademlia.node.Node;
  * A bucket in the Kademlia routing table
  *
  * @author Lontow
- * @created 20140215
+ * @created 20201023
  */
-public class JKademliaBucket implements KademliaBucket
+public class KadBucket implements KademliaBucket
 {
 
     /* How deep is this bucket in the Routing Table */
@@ -37,7 +37,7 @@ public class JKademliaBucket implements KademliaBucket
      * @param depth  How deep in the routing tree is this bucket
      * @param config
      */
-    public JKademliaBucket(int depth, KadConfiguration config)
+    public KadBucket(int depth, KadConfiguration config)
     {
         this.depth = depth;
         this.config = config;

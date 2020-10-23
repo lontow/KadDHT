@@ -1,10 +1,8 @@
 package org.kaddht.Cli_UI;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.InetAddress;
 
 import org.apache.commons.cli.CommandLine;
@@ -16,20 +14,15 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.google.gson.stream.JsonReader;
 
 import org.kaddht.kademlia.DefaultConfiguration;
-import org.kaddht.kademlia.JKademliaNode;
+import org.kaddht.kademlia.KadPeer;
 import org.kaddht.kademlia.node.KademliaId;
 import org.kaddht.kademlia.node.Node;
 
 public class Main {
-    private static JKademliaNode kad1=null;
+    private static KadPeer kad1=null;
     static void  parserConfig(String path) {
         System.out.println(path);
         File configfile = new File(path);
@@ -37,7 +30,7 @@ public class Main {
         try {
             JsonReader jsonReader = new JsonReader(new FileReader(configfile));
             Config config=gson.fromJson(jsonReader, Config.class);
-             kad1 = new JKademliaNode(config.localnode.ownerid, new KademliaId(config.localnode.kadid), config.localnode.udpport);
+             kad1 = new KadPeer(config.localnode.ownerid, new KademliaId(config.localnode.kadid), config.localnode.udpport);
             System.out.println("Created Node Kad : ");
             System.out.println( " \tat "+kad1.getNode().getSocketAddress());
             System.out.println( " \tkadid: "+kad1.getNode().getNodeId().getKadId());

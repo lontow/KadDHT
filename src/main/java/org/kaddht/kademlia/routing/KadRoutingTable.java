@@ -14,7 +14,7 @@ import org.kaddht.kademlia.node.KademliaId;
  * @author Lontow
  * @created 20140215
  */
-public class JKademliaRoutingTable implements KademliaRoutingTable
+public class KadRoutingTable implements KademliaRoutingTable
 {
 
     private final Node localNode;  // The current node
@@ -22,7 +22,7 @@ public class JKademliaRoutingTable implements KademliaRoutingTable
 
     private transient KadConfiguration config;
 
-    public JKademliaRoutingTable(Node localNode, KadConfiguration config)
+    public KadRoutingTable(Node localNode, KadConfiguration config)
     {
         this.localNode = localNode;
         this.config = config;
@@ -35,7 +35,7 @@ public class JKademliaRoutingTable implements KademliaRoutingTable
     }
 
     /**
-     * Initialize the JKademliaRoutingTable to it's default state
+     * Initialize the KadRoutingTable to it's default state
      */
     @Override
     public final void initialize()
@@ -43,7 +43,7 @@ public class JKademliaRoutingTable implements KademliaRoutingTable
         this.buckets = new KademliaBucket[KademliaId.ID_LENGTH];
         for (int i = 0; i < KademliaId.ID_LENGTH; i++)
         {
-            buckets[i] = new JKademliaBucket(i, this.config);
+            buckets[i] = new KadBucket(i, this.config);
         }
     }
 
@@ -121,7 +121,7 @@ public class JKademliaRoutingTable implements KademliaRoutingTable
     }
 
     /**
-     * @return List A List of all Nodes in this JKademliaRoutingTable
+     * @return List A List of all Nodes in this KadRoutingTable
      */
     @Override
     public synchronized final List<Node> getAllNodes()
@@ -140,7 +140,7 @@ public class JKademliaRoutingTable implements KademliaRoutingTable
     }
 
     /**
-     * @return List A List of all Nodes in this JKademliaRoutingTable
+     * @return List A List of all Nodes in this KadRoutingTable
      */
     @Override
     public final List<Contact> getAllContacts()

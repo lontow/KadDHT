@@ -2,7 +2,7 @@ package tests;
 
 import java.io.IOException;
 import java.util.Scanner;
-import org.kaddht.kademlia.JKademliaNode;
+import org.kaddht.kademlia.KadPeer;
 import org.kaddht.kademlia.dht.DHTContentImpl;
 import org.kaddht.kademlia.dht.KadContent;
 import org.kaddht.kademlia.node.KademliaId;
@@ -16,7 +16,7 @@ import org.kaddht.kademlia.node.KademliaId;
 public class RoutingTableStateTesting
 {
 
-    JKademliaNode[] kads;
+    KadPeer[] kads;
 
     public int numKads = 10;
 
@@ -25,18 +25,18 @@ public class RoutingTableStateTesting
         try
         {
             /* Setting up Kad networks */
-            kads = new JKademliaNode[numKads];
+            kads = new KadPeer[numKads];
 
-            kads[0] = new JKademliaNode("user0", new KademliaId("HRF456789SD584567460"), 1334);
-            kads[1] = new JKademliaNode("user1", new KademliaId("ASF456789475DS567461"), 1209);
-            kads[2] = new JKademliaNode("user2", new KademliaId("AFG45678947584567462"), 4585);
-            kads[3] = new JKademliaNode("user3", new KademliaId("FSF45J38947584567463"), 8104);
-            kads[4] = new JKademliaNode("user4", new KademliaId("ASF45678947584567464"), 8335);
-            kads[5] = new JKademliaNode("user5", new KademliaId("GHF4567894DR84567465"), 13345);
-            kads[6] = new JKademliaNode("user6", new KademliaId("ASF45678947584567466"), 12049);
-            kads[7] = new JKademliaNode("user7", new KademliaId("AE345678947584567467"), 14585);
-            kads[8] = new JKademliaNode("user8", new KademliaId("ASAA5678947584567468"), 18104);
-            kads[9] = new JKademliaNode("user9", new KademliaId("ASF456789475845674U9"), 18335);
+            kads[0] = new KadPeer("user0", new KademliaId("HRF456789SD584567460"), 1334);
+            kads[1] = new KadPeer("user1", new KademliaId("ASF456789475DS567461"), 1209);
+            kads[2] = new KadPeer("user2", new KademliaId("AFG45678947584567462"), 4585);
+            kads[3] = new KadPeer("user3", new KademliaId("FSF45J38947584567463"), 8104);
+            kads[4] = new KadPeer("user4", new KademliaId("ASF45678947584567464"), 8335);
+            kads[5] = new KadPeer("user5", new KademliaId("GHF4567894DR84567465"), 13345);
+            kads[6] = new KadPeer("user6", new KademliaId("ASF45678947584567466"), 12049);
+            kads[7] = new KadPeer("user7", new KademliaId("AE345678947584567467"), 14585);
+            kads[8] = new KadPeer("user8", new KademliaId("ASAA5678947584567468"), 18104);
+            kads[9] = new KadPeer("user9", new KademliaId("ASF456789475845674U9"), 18335);
 
             for (int i = 1; i < numKads; i++)
             {
@@ -51,7 +51,7 @@ public class RoutingTableStateTesting
         }
     }
 
-    public KadContent putContent(String content, JKademliaNode owner)
+    public KadContent putContent(String content, KadPeer owner)
     {
         DHTContentImpl c = null;
         try
@@ -68,7 +68,7 @@ public class RoutingTableStateTesting
         return c;
     }
 
-    public void shutdownKad(JKademliaNode kad)
+    public void shutdownKad(KadPeer kad)
     {
         try
         {

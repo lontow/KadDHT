@@ -9,11 +9,11 @@ import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.UserInterruptException;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
-import org.kaddht.kademlia.JKademliaNode;
-import org.kaddht.kademlia.dht.JKademliaStorageEntry;
+import org.kaddht.kademlia.KadPeer;
+import org.kaddht.kademlia.dht.KadStorageEntry;
 import org.kaddht.kademlia.dht.DHTContentImpl;
-import org.kaddht.kademlia.util.LocalFileReader;
-import org.kaddht.kademlia.util.LocalFileWriter;
+import org.kaddht.kademlia.util.fileutil.LocalFileReader;
+import org.kaddht.kademlia.util.fileutil.LocalFileWriter;
 
 
 class Exit extends Exec{
@@ -79,7 +79,7 @@ class Get extends Exec{
         // TODO Auto-generated method stub
         if(key==null) return;
         try {
-            JKademliaStorageEntry entry=kad.get(key);
+            KadStorageEntry entry=kad.get(key);
             String content= new DHTContentImpl().fromSerializedForm(entry.getContent()).getData();
             LocalFileWriter.write(content);
         }catch (Exception e) {
@@ -128,8 +128,8 @@ class ShowRoute extends Exec{
 
 public class Shell {
 
-    private JKademliaNode kad=null;
-    public Shell(JKademliaNode kad) {
+    private KadPeer kad=null;
+    public Shell(KadPeer kad) {
         this.kad=kad;
     }
 

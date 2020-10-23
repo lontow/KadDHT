@@ -3,7 +3,7 @@ package tests;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.kaddht.kademlia.DefaultConfiguration;
-import org.kaddht.kademlia.JKademliaNode;
+import org.kaddht.kademlia.KadPeer;
 import org.kaddht.kademlia.KadConfiguration;
 import org.kaddht.kademlia.dht.DHTContentImpl;
 import org.kaddht.kademlia.node.KademliaId;
@@ -23,9 +23,9 @@ public class AutoRefreshOperation2 implements Simulation
         try
         {
             /* Setting up 2 Kad networks */
-            final JKademliaNode kad1 = new JKademliaNode("JoshuaK", new KademliaId("ASF456789djem4567463"), 12049);
-            final JKademliaNode kad2 = new JKademliaNode("Crystal", new KademliaId("AS84k678DJRW84567465"), 4585);
-            final JKademliaNode kad3 = new JKademliaNode("Shameer", new KademliaId("AS84k67894758456746A"), 8104);
+            final KadPeer kad1 = new KadPeer("JoshuaK", new KademliaId("ASF456789djem4567463"), 12049);
+            final KadPeer kad2 = new KadPeer("Crystal", new KademliaId("AS84k678DJRW84567465"), 4585);
+            final KadPeer kad3 = new KadPeer("Shameer", new KademliaId("AS84k67894758456746A"), 8104);
 
             /* Connecting nodes */
             System.out.println("Connecting Nodes");

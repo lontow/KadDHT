@@ -3,7 +3,7 @@ package tests;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.kaddht.kademlia.DefaultConfiguration;
-import org.kaddht.kademlia.JKademliaNode;
+import org.kaddht.kademlia.KadPeer;
 import org.kaddht.kademlia.KadConfiguration;
 import org.kaddht.kademlia.dht.DHTContentImpl;
 import org.kaddht.kademlia.node.KademliaId;
@@ -23,11 +23,11 @@ public class AutoRefreshOperation implements Simulation
         try
         {
             /* Setting up 2 Kad networks */
-            final JKademliaNode kad1 = new JKademliaNode("JoshuaK", new KademliaId("ASF456789djem45674DH"), 12049);
-            final JKademliaNode kad2 = new JKademliaNode("Crystal", new KademliaId("AJDHR678947584567464"), 4585);
-            final JKademliaNode kad3 = new JKademliaNode("Shameer", new KademliaId("AS84k6789KRNS45KFJ8W"), 8104);
-            final JKademliaNode kad4 = new JKademliaNode("Lokesh.", new KademliaId("ASF45678947A845674GG"), 8335);
-            final JKademliaNode kad5 = new JKademliaNode("Chandu.", new KademliaId("AS84kUD894758456dyrj"), 13345);
+            final KadPeer kad1 = new KadPeer("JoshuaK", new KademliaId("ASF456789djem45674DH"), 12049);
+            final KadPeer kad2 = new KadPeer("Crystal", new KademliaId("AJDHR678947584567464"), 4585);
+            final KadPeer kad3 = new KadPeer("Shameer", new KademliaId("AS84k6789KRNS45KFJ8W"), 8104);
+            final KadPeer kad4 = new KadPeer("Lokesh.", new KademliaId("ASF45678947A845674GG"), 8335);
+            final KadPeer kad5 = new KadPeer("Chandu.", new KademliaId("AS84kUD894758456dyrj"), 13345);
 
             /* Connecting nodes */
             System.out.println("Connecting Nodes");

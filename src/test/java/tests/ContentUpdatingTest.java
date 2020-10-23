@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.kaddht.kademlia.dht.DHTContentImpl;
 import org.kaddht.kademlia.dht.GetParameter;
-import org.kaddht.kademlia.JKademliaNode;
+import org.kaddht.kademlia.KadPeer;
 import org.kaddht.kademlia.dht.KademliaStorageEntry;
 import org.kaddht.kademlia.exceptions.ContentNotFoundException;
 import org.kaddht.kademlia.node.KademliaId;
@@ -23,9 +23,9 @@ public class ContentUpdatingTest
         try
         {
             /* Setting up 2 Kad networks */
-            JKademliaNode kad1 = new JKademliaNode("JoshuaK", new KademliaId("ASF45678947584567467"), 7574);
+            KadPeer kad1 = new KadPeer("JoshuaK", new KademliaId("ASF45678947584567467"), 7574);
             System.out.println("Created Node Kad 1: " + kad1.getNode().getNodeId());
-            JKademliaNode kad2 = new JKademliaNode("Crystal", new KademliaId("ASERTKJDHGVHERJHGFLK"), 7572);
+            KadPeer kad2 = new KadPeer("Crystal", new KademliaId("ASERTKJDHGVHERJHGFLK"), 7572);
             System.out.println("Created Node Kad 2: " + kad2.getNode().getNodeId());
             kad2.bootstrap(kad1.getNode());
 

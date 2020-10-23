@@ -5,9 +5,8 @@ import java.util.List;
 import org.kaddht.kademlia.KadConfiguration;
 import org.kaddht.kademlia.KadServer;
 import org.kaddht.kademlia.KademliaNode;
-import org.kaddht.kademlia.dht.JKademliaStorageEntry;
+import org.kaddht.kademlia.dht.KadStorageEntry;
 import org.kaddht.kademlia.dht.KademliaDHT;
-import org.kaddht.kademlia.dht.KademliaStorageEntry;
 import org.kaddht.kademlia.message.Message;
 import org.kaddht.kademlia.message.StoreContentMessage;
 import org.kaddht.kademlia.node.Node;
@@ -23,7 +22,7 @@ public class StoreOperation implements Operation
 
     private final KadServer server;
     private final KademliaNode localNode;
-    private final JKademliaStorageEntry storageEntry;
+    private final KadStorageEntry storageEntry;
     private final KademliaDHT localDht;
     private final KadConfiguration config;
 
@@ -34,7 +33,7 @@ public class StoreOperation implements Operation
      * @param localDht     The local DHT
      * @param config
      */
-    public StoreOperation(KadServer server, KademliaNode localNode, JKademliaStorageEntry storageEntry, KademliaDHT localDht, KadConfiguration config)
+    public StoreOperation(KadServer server, KademliaNode localNode, KadStorageEntry storageEntry, KademliaDHT localDht, KadConfiguration config)
     {
         this.server = server;
         this.localNode = localNode;

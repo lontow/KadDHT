@@ -1,15 +1,15 @@
 package org.kaddht.Cli_UI;
 
-import org.kaddht.kademlia.JKademliaNode;
+import org.kaddht.kademlia.KadPeer;
 
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
 abstract class Exec {
-    protected JKademliaNode kad=null;
+    protected KadPeer kad=null;
     abstract  void run();
     abstract void usage();
-    public Exec setKad(JKademliaNode kad) {
+    public Exec setKad(KadPeer kad) {
         this.kad = kad;
         return this;
     }
@@ -22,7 +22,7 @@ public class Command{
     public static void register(String name,Exec exec) {
         commands.put(name, exec);
     }
-    public static void parse(String line,JKademliaNode kad) {
+    public static void parse(String line, KadPeer kad) {
         if(line.equals("")) {
             return;
         }

@@ -17,8 +17,7 @@ import org.kaddht.kademlia.dht.GetParameter;
 import org.kaddht.kademlia.dht.DHT;
 import org.kaddht.kademlia.dht.KadContent;
 import org.kaddht.kademlia.dht.KademliaDHT;
-import org.kaddht.kademlia.dht.KademliaStorageEntry;
-import org.kaddht.kademlia.dht.JKademliaStorageEntry;
+import org.kaddht.kademlia.dht.KadStorageEntry;
 import org.kaddht.kademlia.exceptions.ContentNotFoundException;
 import org.kaddht.kademlia.exceptions.RoutingException;
 import org.kaddht.kademlia.message.MessageFactory;
@@ -29,7 +28,7 @@ import org.kaddht.kademlia.operation.ContentLookupOperation;
 import org.kaddht.kademlia.operation.Operation;
 import org.kaddht.kademlia.operation.KadRefreshOperation;
 import org.kaddht.kademlia.operation.StoreOperation;
-import org.kaddht.kademlia.routing.JKademliaRoutingTable;
+import org.kaddht.kademlia.routing.KadRoutingTable;
 import org.kaddht.kademlia.routing.KademliaRoutingTable;
 import org.kaddht.kademlia.util.Base64;
 import org.kaddht.kademlia.util.serializer.JsonDHTSerializer;
@@ -46,7 +45,7 @@ import org.kaddht.kademlia.util.serializer.JsonSerializer;
  * @todo Handle IPv6 Addresses
  *
  */
-public class JKademliaNode implements KademliaNode
+public class KadPeer implements KademliaNode
 {
 
     /* Kademlia Attributes */
@@ -92,7 +91,7 @@ public class JKademliaNode implements KademliaNode
      *                     from disk <i>or</i> a network error occurred while
      *                     attempting to bootstrap to the network
      * */
-    public JKademliaNode(String ownerId, Node localNode, int udpPort, KademliaDHT dht, KademliaRoutingTable routingTable, KadConfiguration config) throws IOException
+    public KadPeer(String ownerId, Node localNode, int udpPort, KademliaDHT dht, KademliaRoutingTable routingTable, KadConfiguration config) throws IOException
     {
         this.ownerId = ownerId;
         this.udpPort = udpPort;
@@ -117,7 +116,7 @@ public class JKademliaNode implements KademliaNode
                 try
                 {
                     /* Runs a DHT RefreshOperation  */
-                    JKademliaNode.this.refresh();
+                    KadPeer.this.refresh();
                 }
                 catch (IOException e)
                 {
@@ -137,7 +136,7 @@ public class JKademliaNode implements KademliaNode
         this.refreshOperationTimer.purge();
     }
 
-    public JKademliaNode(String ownerId, Node node, int udpPort, KademliaRoutingTable routingTable, KadConfiguration config) throws IOException
+    public KadPeer(String ownerId, Node node, int udpPort, KademliaRoutingTable routingTable, KadConfiguration config) throws IOException
     {
         this(
                 ownerId,
@@ -149,18 +148,18 @@ public class JKademliaNode implements KademliaNode
         );
     }
 
-    public JKademliaNode(String ownerId, Node node, int udpPort, KadConfiguration config) throws IOException
+    public KadPeer(String ownerId, Node node, int udpPort, KadConfiguration config) throws IOException
     {
         this(
                 ownerId,
                 node,
                 udpPort,
-                new JKademliaRoutingTable(node, config),
+                new KadRoutingTable(node, config),
                 config
         );
     }
 
-    public JKademliaNode(String ownerId, KademliaId defaultId, int udpPort) throws IOException
+    public KadPeer(String ownerId, KademliaId defaultId, int udpPort) throws IOException
     {
         this(
                 ownerId,
@@ -180,9 +179,9 @@ public class JKademliaNode implements KademliaNode
      * @throws java.io.FileNotFoundException
      * @throws java.lang.ClassNotFoundException
      */
-    public static JKademliaNode loadFromFile(String ownerId) throws FileNotFoundException, IOException, ClassNotFoundException
+    public static KadPeer loadFromFile(String ownerId) throws FileNotFoundException, IOException, ClassNotFoundException
     {
-        return JKademliaNode.loadFromFile(ownerId, new DefaultConfiguration());
+        return KadPeer.loadFromFile(ownerId, new DefaultConfiguration());
     }
 
     /**
@@ -196,7 +195,7 @@ public class JKademliaNode implements KademliaNode
      * @throws java.io.FileNotFoundException
      * @throws java.lang.ClassNotFoundException
      */
-    public static JKademliaNode loadFromFile(String ownerId, KadConfiguration iconfig) throws FileNotFoundException, IOException, ClassNotFoundException
+    public static KadPeer loadFromFile(String ownerId, KadConfiguration iconfig) throws FileNotFoundException, IOException, ClassNotFoundException
     {
         DataInputStream din;
 
@@ -204,7 +203,7 @@ public class JKademliaNode implements KademliaNode
          * @section Read Basic Kad data
          */
         din = new DataInputStream(new FileInputStream(getStateStorageFolderName(ownerId, iconfig) + File.separator + "kad.kns"));
-        JKademliaNode ikad = new JsonSerializer<JKademliaNode>().read(din);
+        KadPeer ikad = new JsonSerializer<KadPeer>().read(din);
 
         /**
          * @section Read the routing table
@@ -225,7 +224,7 @@ public class JKademliaNode implements KademliaNode
         KademliaDHT idht = new JsonDHTSerializer().read(din);
         idht.setConfiguration(iconfig);
 
-        return new JKademliaNode(ownerId, inode, ikad.getPort(), idht, irtbl, iconfig);
+        return new KadPeer(ownerId, inode, ikad.getPort(), idht, irtbl, iconfig);
     }
 
     @Override
@@ -271,10 +270,10 @@ public class JKademliaNode implements KademliaNode
         ;
         System.out.println("put:"+Base64.encode(json)+"\n you can get file using this key!");
         System.out.println(new String(json));
-        return this.put(new JKademliaStorageEntry(content));
+        return this.put(new KadStorageEntry(content));
     }
     @Override
-    public int put(JKademliaStorageEntry entry) throws IOException
+    public int put(KadStorageEntry entry) throws IOException
     {
         StoreOperation sop = new StoreOperation(this.server, this, entry, this.dht, this.config);
         sop.execute();
@@ -287,17 +286,17 @@ public class JKademliaNode implements KademliaNode
     @Override
     public void putLocally(KadContent content) throws IOException
     {
-        this.dht.store(new JKademliaStorageEntry(content));
+        this.dht.store(new KadStorageEntry(content));
     }
 
-    public JKademliaStorageEntry get(String cipher) throws IOException, ContentNotFoundException {
+    public KadStorageEntry get(String cipher) throws IOException, ContentNotFoundException {
             byte[] decoded= Base64.decode(cipher);
             GetParameter gp=new Gson().fromJson(new String(decoded),GetParameter.class);
             System.out.println("get:gp"+new String(decoded));
             return this.get(gp);
     }
     @Override
-    public JKademliaStorageEntry get(GetParameter param) throws NoSuchElementException, IOException, ContentNotFoundException
+    public KadStorageEntry get(GetParameter param) throws NoSuchElementException, IOException, ContentNotFoundException
     {
         if (this.dht.contains(param))
         {
@@ -358,7 +357,7 @@ public class JKademliaNode implements KademliaNode
          */
         dout = new DataOutputStream(new FileOutputStream(getStateStorageFolderName(this.ownerId, this.config) + File.separator + "kad.kns"));
         System.out.println("path:"+getStateStorageFolderName(this.ownerId, this.config) + File.separator + "kad.kns");
-        new JsonSerializer<JKademliaNode>().write(this, dout);
+        new JsonSerializer<KadPeer>().write(this, dout);
 
         /**
          * @section Save the node state

@@ -1,6 +1,6 @@
 package tests;
 
-import org.kaddht.kademlia.JKademliaNode;
+import org.kaddht.kademlia.KadPeer;
 import org.kaddht.kademlia.dht.DHTContentImpl;
 import org.kaddht.kademlia.dht.GetParameter;
 import org.kaddht.kademlia.dht.KademliaStorageEntry;
@@ -21,8 +21,8 @@ public class SaveStateTest2
         try
         {
             /* Setting up 2 Kad networks */
-            JKademliaNode kad1 = new JKademliaNode("JoshuaK", new KademliaId("ASF45678947584567463"), 12049);
-            JKademliaNode kad2 = new JKademliaNode("Crystal", new KademliaId("ASF45678947584567464"), 4585);
+            KadPeer kad1 = new KadPeer("JoshuaK", new KademliaId("ASF45678947584567463"), 12049);
+            KadPeer kad2 = new KadPeer("Crystal", new KademliaId("ASF45678947584567464"), 4585);
 
             /* Connecting 2 to 1 */
             System.out.println("Connecting Nodes 1 & 2");
@@ -48,7 +48,7 @@ public class SaveStateTest2
             kad1.shutdown(true);
 
             System.out.println("\n\n\nReloading Kad instance from file");
-            kad1 = JKademliaNode.loadFromFile("JoshuaK");
+            kad1 = KadPeer.loadFromFile("JoshuaK");
             kad1.bootstrap(kad2.getNode());
             System.out.println(kad2);
 
@@ -61,7 +61,7 @@ public class SaveStateTest2
             DHTContentImpl cc = new DHTContentImpl().fromSerializedForm(content.getContent());
             System.out.println("Content received: " + cc);
 
-            JKademliaNode kad3 = new JKademliaNode("Shameer", new KademliaId("AS84k67894758456746A"), 8104);
+            KadPeer kad3 = new KadPeer("Shameer", new KademliaId("AS84k67894758456746A"), 8104);
             System.out.println("Created Node Kad 3: " + kad3.getNode().getNodeId());
             kad3.bootstrap(kad1.getNode());
         }

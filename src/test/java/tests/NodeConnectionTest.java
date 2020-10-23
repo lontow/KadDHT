@@ -1,7 +1,7 @@
 package tests;
 
 import java.io.IOException;
-import org.kaddht.kademlia.JKademliaNode;
+import org.kaddht.kademlia.KadPeer;
 import org.kaddht.kademlia.node.KademliaId;
 
 /**
@@ -18,10 +18,10 @@ public class NodeConnectionTest
         try
         {
             /* Setting up 2 Kad networks */
-            JKademliaNode kad1 = new JKademliaNode("JoshuaK", new KademliaId("ASF45678947584567467"), 7574);
+            KadPeer kad1 = new KadPeer("JoshuaK", new KademliaId("ASF45678947584567467"), 7574);
             System.out.println("Created Node Kad 1: " + kad1.getNode().getNodeId());
 
-            JKademliaNode kad2 = new JKademliaNode("Crystal", new KademliaId("ASERTKJDHGVHERJHGFLK"), 7572);
+            KadPeer kad2 = new KadPeer("Crystal", new KademliaId("ASERTKJDHGVHERJHGFLK"), 7572);
             //NodeId diff12 = kad1.getNode().getNodeId().xor(kad2.getNode().getNodeId());
             System.out.println("Created Node Kad 2: " + kad2.getNode().getNodeId());
 //            System.out.println(kad1.getNode().getNodeId() + " ^ " + kad2.getNode().getNodeId() + " = " + diff12);
@@ -37,7 +37,7 @@ public class NodeConnectionTest
 //            System.out.println(kad2.getNode().getRoutingTable());
 
             /* Creating a new node 3 and connecting it to 1, hoping it'll get onto 2 also */
-            JKademliaNode kad3 = new JKademliaNode("Jessica", new KademliaId("ASERTKJDOLKMNBVFR45G"), 7783);
+            KadPeer kad3 = new KadPeer("Jessica", new KademliaId("ASERTKJDOLKMNBVFR45G"), 7783);
             System.out.println("\n\n\n\n\n\nCreated Node Kad 3: " + kad3.getNode().getNodeId());
 
             System.out.println("Connecting Kad 3 and Kad 2");
@@ -47,7 +47,7 @@ public class NodeConnectionTest
 //            NodeId diff31 = kad1.getNode().getNodeId().xor(kad3.getNode().getNodeId());
 //            System.out.println("Kad 3 - Kad 1 distance: " + diff31.getFirstSetBitIndex());
 //            System.out.println("Kad 3 - Kad 2 distance: " + diff32.getFirstSetBitIndex());
-            JKademliaNode kad4 = new JKademliaNode("Sandy", new KademliaId("ASERTK85OLKMN85FR4SS"), 7789);
+            KadPeer kad4 = new KadPeer("Sandy", new KademliaId("ASERTK85OLKMN85FR4SS"), 7789);
             System.out.println("\n\n\n\n\n\nCreated Node Kad 4: " + kad4.getNode().getNodeId());
 
             System.out.println("Connecting Kad 4 and Kad 2");

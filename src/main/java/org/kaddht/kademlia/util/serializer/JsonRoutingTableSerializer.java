@@ -9,7 +9,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import org.kaddht.kademlia.routing.JKademliaRoutingTable;
+import org.kaddht.kademlia.routing.KadRoutingTable;
 import java.lang.reflect.Type;
 import java.util.List;
 import org.kaddht.kademlia.KadConfiguration;
@@ -20,9 +20,9 @@ import org.kaddht.kademlia.routing.KademliaRoutingTable;
  * A KadSerializer that serializes routing tables to JSON format
  The generic serializer is not working for routing tables
 
- Why a JKademliaRoutingTable specific serializer?
+ Why a KadRoutingTable specific serializer?
  The routing table structure:
- - JKademliaRoutingTable
+ - KadRoutingTable
  -- Buckets[]
  --- Map<NodeId, Node>
  * ---- NodeId:KeyBytes
@@ -34,7 +34,7 @@ import org.kaddht.kademlia.routing.KademliaRoutingTable;
  * Solution
  - Make the Buckets[] transient
  - Simply store all Nodes in the serialized object
- - When reloading, re-add all nodes to the JKademliaRoutingTable
+ - When reloading, re-add all nodes to the KadRoutingTable
  *
  * @author Lontow
  *
@@ -73,8 +73,8 @@ public class JsonRoutingTableSerializer implements KadSerializer<KademliaRouting
         {
             writer.beginArray();
 
-            /* Write the basic JKademliaRoutingTable */
-            gson.toJson(data, JKademliaRoutingTable.class, writer);
+            /* Write the basic KadRoutingTable */
+            gson.toJson(data, KadRoutingTable.class, writer);
 
             /* Now Store the Contacts  */
             gson.toJson(data.getAllContacts(), contactCollectionType, writer);
@@ -91,11 +91,11 @@ public class JsonRoutingTableSerializer implements KadSerializer<KademliaRouting
         {
             reader.beginArray();
 
-            /* Read the basic JKademliaRoutingTable */
-            KademliaRoutingTable tbl = gson.fromJson(reader, JKademliaRoutingTable.class);
+            /* Read the basic KadRoutingTable */
+            KademliaRoutingTable tbl = gson.fromJson(reader, KadRoutingTable.class);
             tbl.setConfiguration(config);
             
-            /* Now get the Contacts and add them back to the JKademliaRoutingTable */
+            /* Now get the Contacts and add them back to the KadRoutingTable */
             List<Contact> contacts = gson.fromJson(reader, contactCollectionType);
             tbl.initialize();
 

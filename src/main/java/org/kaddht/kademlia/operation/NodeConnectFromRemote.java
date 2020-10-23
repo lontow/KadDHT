@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.NoSuchElementException;
 
-import org.kaddht.kademlia.JKademliaNode;
+import org.kaddht.kademlia.KadPeer;
 import org.kaddht.kademlia.dht.GetParameter;
 import org.kaddht.kademlia.dht.KademliaStorageEntry;
 import org.kaddht.kademlia.exceptions.ContentNotFoundException;
@@ -14,7 +14,7 @@ import org.kaddht.kademlia.dht.DHTContentImpl;
 
 public class NodeConnectFromRemote {
 public static void main(String[] args) throws IOException, NoSuchElementException, ContentNotFoundException {
-	JKademliaNode kad = new JKademliaNode("Lontow2", new KademliaId("ASERTK85OLKMN85FR455"), 7900);
+	KadPeer kad = new KadPeer("Lontow2", new KademliaId("ASERTK85OLKMN85FR455"), 7900);
 	System.out.println(InetAddress.getLocalHost());
 	kad.bootstrap(new Node(new KademliaId("ASF45678947584567467"), InetAddress.getByName("hg1"), 9999));
 	System.out.println(kad.getRoutingTable());

@@ -1,5 +1,6 @@
 package org.kaddht.kademlia.operation;
 
+import org.kaddht.kademlia.dht.KadStorageEntry;
 import org.kaddht.kademlia.message.Receiver;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,12 +11,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import org.kaddht.kademlia.JKademliaNode;
+import org.kaddht.kademlia.KadPeer;
 import org.kaddht.kademlia.dht.GetParameter;
 import org.kaddht.kademlia.KadConfiguration;
 import org.kaddht.kademlia.KadServer;
-import org.kaddht.kademlia.dht.JKademliaStorageEntry;
-import org.kaddht.kademlia.dht.KademliaStorageEntry;
 import org.kaddht.kademlia.exceptions.ContentNotFoundException;
 import org.kaddht.kademlia.exceptions.RoutingException;
 import org.kaddht.kademlia.exceptions.UnknownMessageException;
@@ -43,8 +42,8 @@ public class ContentLookupOperation implements Operation, Receiver
     private static final Byte FAILED = (byte) 0x03;
 
     private final KadServer server;
-    private final JKademliaNode localNode;
-    private JKademliaStorageEntry contentFound = null;
+    private final KadPeer localNode;
+    private KadStorageEntry contentFound = null;
     private final KadConfiguration config;
 
     private final ContentLookupMessage lookupMessage;
@@ -75,7 +74,7 @@ public class ContentLookupOperation implements Operation, Receiver
      * @param params    The parameters to search for the content which we need to find
      * @param config
      */
-    public ContentLookupOperation(KadServer server, JKademliaNode localNode, GetParameter params, KadConfiguration config)
+    public ContentLookupOperation(KadServer server, KadPeer localNode, GetParameter params, KadConfiguration config)
     {
         /* Construct our lookup message */
         this.lookupMessage = new ContentLookupMessage(localNode.getNode(), params);
@@ -255,7 +254,7 @@ public class ContentLookupOperation implements Operation, Receiver
             this.localNode.getRoutingTable().insert(msg.getOrigin());
 
             /* Get the Content and check if it satisfies the required parameters */
-            JKademliaStorageEntry content = msg.getContent();
+            KadStorageEntry content = msg.getContent();
             System.out.println("get Message"+content);
             this.contentFound = content;
             this.isContentFound = true;
@@ -323,7 +322,7 @@ public class ContentLookupOperation implements Operation, Receiver
      *
      * @throws org.kaddht.kademlia.exceptions.ContentNotFoundException
      */
-    public synchronized JKademliaStorageEntry getContentFound() throws ContentNotFoundException
+    public synchronized KadStorageEntry getContentFound() throws ContentNotFoundException
     {
         if (this.isContentFound)
         {

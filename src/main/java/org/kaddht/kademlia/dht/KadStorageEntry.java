@@ -1,23 +1,23 @@
 package org.kaddht.kademlia.dht;
 
 /**
- * A JKademliaStorageEntry class that is used to store a content on the DHT
+ * A KadStorageEntry class that is used to store a content on the DHT
  *
  * @author Lontow
  * @since 20201020
  */
-public class JKademliaStorageEntry implements KademliaStorageEntry
+public class KadStorageEntry implements KademliaStorageEntry
 {
 
     private String content;
     private final StorageEntryMetadata metadata;
 
-    public JKademliaStorageEntry(final KadContent content)
+    public KadStorageEntry(final KadContent content)
     {
         this(content, new StorageEntryMetadata(content));
     }
 
-    public JKademliaStorageEntry(final KadContent content, final StorageEntryMetadata metadata)
+    public KadStorageEntry(final KadContent content, final StorageEntryMetadata metadata)
     {
         this.setContent(content.toSerializedForm());
         this.metadata = metadata;

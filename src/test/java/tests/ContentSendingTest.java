@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import org.kaddht.kademlia.dht.DHTContentImpl;
 import org.kaddht.kademlia.dht.GetParameter;
-import org.kaddht.kademlia.JKademliaNode;
+import org.kaddht.kademlia.KadPeer;
 import org.kaddht.kademlia.dht.KademliaStorageEntry;
 import org.kaddht.kademlia.exceptions.ContentNotFoundException;
 import org.kaddht.kademlia.node.KademliaId;
@@ -24,11 +24,11 @@ public class ContentSendingTest
         try
         {
             /* Setting up 2 Kad networks */
-            JKademliaNode kad1 = new JKademliaNode("JoshuaK", new KademliaId("ASF45678947584567467"), 7574);
+            KadPeer kad1 = new KadPeer("JoshuaK", new KademliaId("ASF45678947584567467"), 7574);
             System.out.println("Created Node Kad 1: " + kad1.getNode().getNodeId());
-            JKademliaNode kad2 = new JKademliaNode("Crystal", new KademliaId("ASERTKJDHGVHERJHGFLK"), 7572);
+            KadPeer kad2 = new KadPeer("Crystal", new KademliaId("ASERTKJDHGVHERJHGFLK"), 7572);
             System.out.println("Created Node Kad 2: " + kad2.getNode().getNodeId());
-            JKademliaNode kad3 = new JKademliaNode("Shameer", new KademliaId("AS84k67894758456746A"), 8104);
+            KadPeer kad3 = new KadPeer("Shameer", new KademliaId("AS84k67894758456746A"), 8104);
             kad2.bootstrap(kad1.getNode());
             System.out.println("Created Node Kad 3: " + kad3.getNode().getNodeId());
             kad3.bootstrap(kad1.getNode());
@@ -48,7 +48,7 @@ public class ContentSendingTest
 
             kad2.shutdown(true);
             kad1.shutdown(true);
-            kad1 = JKademliaNode.loadFromFile("JoshuaK");
+            kad1 = KadPeer.loadFromFile("JoshuaK");
             kad1.bootstrap(kad3.getNode());
             /**
              * Lets retrieve the content
