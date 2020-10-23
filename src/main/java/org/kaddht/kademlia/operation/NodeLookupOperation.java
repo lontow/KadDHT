@@ -20,17 +20,16 @@ import org.kaddht.kademlia.node.Node;
 import org.kaddht.kademlia.node.KademliaId;
 
 /**
- * Finds the K closest nodes to a specified identifier
- * The algorithm terminates when it has gotten responses from the K closest nodes it has seen.
- * Nodes that fail to respond are removed from consideration
+ * 查找最接近指定标识符的K个节点
+ * 算法得到K个最接近节点的响应时终止
+ * 无法响应的节点则删除
  *
- * @author Lontow
- * @created 20140219
+ * @author 刘朕龙
+ * @created 20201017
  */
 public class NodeLookupOperation implements Operation, Receiver
 {
 
-    /* Constants */
     private static final String UNASKED = "UnAsked";
     private static final String AWAITING = "Awaiting";
     private static final String ASKED = "Asked";
@@ -40,13 +39,18 @@ public class NodeLookupOperation implements Operation, Receiver
     private final KademliaNode localNode;
     private final KadConfiguration config;
 
-    private final Message lookupMessage;        // Message sent to each peer
+    private final Message lookupMessage;
+
     private final Map<Node, String> nodes;
 
-    /* Tracks messages in transit and awaiting reply */
+    /**
+     *  跟踪传输中的消息并等待回复
+     */
     private final Map<Integer, Node> messagesTransiting;
 
-    /* Used to sort nodes */
+    /**
+     *  用于排序节点
+     */
     private final Comparator comparator;
 
     
@@ -55,9 +59,9 @@ public class NodeLookupOperation implements Operation, Receiver
     }
 
     /**
-     * @param server    KadServer used for communication
-     * @param localNode The local node making the communication
-     * @param lookupId  The ID for which to find nodes close to
+     * @param server    KadServer用于通讯
+     * @param localNode 进行通讯的本地节点
+     * @param lookupId  查找附近节点的ID
      * @param config
      */
     public NodeLookupOperation(KadServer server, KademliaNode localNode, KademliaId lookupId, KadConfiguration config)
@@ -68,10 +72,7 @@ public class NodeLookupOperation implements Operation, Receiver
 
         this.lookupMessage = new NodeLookupMessage(localNode.getNode(), lookupId);
 
-        /**
-         * We initialize a TreeMap to store nodes.
-         * This map will be sorted by which nodes are closest to the lookupId
-         */
+
         this.comparator = new KeyComparator(lookupId);
         this.nodes = new TreeMap(this.comparator);
     }
@@ -85,18 +86,15 @@ public class NodeLookupOperation implements Operation, Receiver
     {
         try
         {
-            /* Set the local node as already asked */
+            // 按照要求设置本地节点
             nodes.put(this.localNode.getNode(), ASKED);
 
-            /**
-             * We add all nodes here instead of the K-Closest because there may be the case that the K-Closest are offline
-             * - The operation takes care of looking at the K-Closest.
-             */
+
             this.addNodes(this.localNode.getRoutingTable().getAllNodes());
 
-            /* If we haven't finished as yet, wait for a maximum of config.operationTimeout() time */
             int totalTimeWaited = 0;
-            int timeInterval = 10;     // We re-check every n milliseconds
+            int timeInterval = 10;
+             // 我们每n毫秒重新检查一次
             while (totalTimeWaited < this.config.operationTimeout())
             {
                 if (!this.askNodesorFinish())
@@ -110,7 +108,7 @@ public class NodeLookupOperation implements Operation, Receiver
                 }
             }
 
-            /* Now after we've finished, we would have an idea of offline nodes, lets update our routing table */
+            // 完成后更新路由表
             this.localNode.getRoutingTable().setUnresponsiveContacts(this.getFailedNodes());
 
         }
@@ -126,15 +124,15 @@ public class NodeLookupOperation implements Operation, Receiver
     }
 
     /**
-     * Add nodes from this list to the set of nodes to lookup
+     * 将列表中的节点添加到要查找的节点集中
      *
-     * @param list The list from which to add nodes
+     * @param list 从中添加节点的列表
      */
     public void addNodes(List<Node> list)
     {
         for (Node o : list)
         {
-            /* If this node is not in the list, add the node */
+            // 如果此节点不在列表中，请添加该节点
             if (!nodes.containsKey(o))
             {
                 nodes.put(o, UNASKED);
@@ -143,36 +141,33 @@ public class NodeLookupOperation implements Operation, Receiver
     }
 
     /**
-     * Asks some of the K closest nodes seen but not yet queried.
-     * Assures that no more than DefaultConfiguration.CONCURRENCY messages are in transit at a time
-     *
-     * This method should be called every time a reply is received or a timeout occurs.
-     *
-     * If all K closest nodes have been asked and there are no messages in transit,
-     * the algorithm is finished.
+     * 询问已找到但尚未查询的 K 个最接近的节点
+     * 确保一次传输的消息不超过DefaultConfiguration.CONCURRENCY
+     * 每当接收到答复或发生超时时，都应调用此方法
+     * 如果已经询问了所有K个最近的节点，并且没有传输中的消息，则算法完成
      *
      * @return <code>true</code> if finished OR <code>false</code> otherwise
      */
     private boolean askNodesorFinish() throws IOException
     {
-        /* If >= CONCURRENCY nodes are in transit, don't do anything */
+        // 如果 >= CONCURRENCY节点在传输中，则不执行任何操作
         if (this.config.maxConcurrentMessagesTransiting() <= this.messagesTransiting.size())
         {
             return false;
         }
 
-        /* Get unqueried nodes among the K closest seen that have not FAILED */
+        // 获取未失败的K个最接近的未查询节点
         List<Node> unasked = this.closestNodesNotFailed(UNASKED);
 
         if (unasked.isEmpty() && this.messagesTransiting.isEmpty())
         {
-            /* We have no unasked nodes nor any messages in transit, we're finished! */
+
             return true;
         }
 
         /**
-         * Send messages to nodes in the list;
-         * making sure than no more than CONCURRENCY messsages are in transit
+         * 发送消息到列表中的节点
+         * 确保正在传输的消息不超过CONCURRENT条
          */
         for (int i = 0; (this.messagesTransiting.size() < this.config.maxConcurrentMessagesTransiting()) && (i < unasked.size()); i++)
         {
@@ -184,14 +179,13 @@ public class NodeLookupOperation implements Operation, Receiver
             this.messagesTransiting.put(comm, n);
         }
 
-        /* We're not finished as yet, return false */
         return false;
     }
 
     /**
-     * @param status The status of the nodes to return
+     * @param status
      *
-     * @return The K closest nodes to the target lookupId given that have the specified status
+     * @return 给定状态下与目标lookupId最接近的 K 个节点
      */
     private List<Node> closestNodes(String status)
     {
@@ -202,7 +196,7 @@ public class NodeLookupOperation implements Operation, Receiver
         {
             if (status.equals(e.getValue()))
             {
-                /* We got one with the required status, now add it */
+
                 closestNodes.add((Node) e.getKey());
                 if (--remainingSpaces == 0)
                 {
@@ -215,8 +209,8 @@ public class NodeLookupOperation implements Operation, Receiver
     }
 
     /**
-     * Find The K closest nodes to the target lookupId given that have not FAILED.
-     * From those K, get those that have the specified status
+     * 给定尚未找到目标的，与目标lookupId最接近的K个节点。
+     * 从那些K中获得具有指定状态的那些
      *
      * @param status The status of the nodes to return
      *
@@ -233,7 +227,7 @@ public class NodeLookupOperation implements Operation, Receiver
             {
                 if (status.equals(e.getValue()))
                 {
-                    /* We got one with the required status, now add it */
+
                     closestNodes.add(e.getKey());
                 }
 
@@ -248,7 +242,7 @@ public class NodeLookupOperation implements Operation, Receiver
     }
 
     /**
-     * Receive and handle the incoming NodeReplyMessage
+     * 接收并处理传入的NodeReplyMessage
      *
      * @param comm
      *
@@ -259,29 +253,29 @@ public class NodeLookupOperation implements Operation, Receiver
     {
         if (!(incoming instanceof NodeReplyMessage))
         {
-            /* Not sure why we get a message of a different type here... @todo Figure it out. */
+
             return;
         }
-        /* We receive a NodeReplyMessage with a set of nodes, read this message */
+        // 我们收到带有一组节点的NodeReplyMessage
         NodeReplyMessage msg = (NodeReplyMessage) incoming;
 
-        /* Add the origin node to our routing table */
+        // 将原始节点添加到我们的路由表中
         Node origin = msg.getOrigin();
         this.localNode.getRoutingTable().insert(origin);
 
-        /* Set that we've completed ASKing the origin node */
+        // 设置我们已经完成了对原始节点的询问
         this.nodes.put(origin, ASKED);
 
-        /* Remove this msg from messagesTransiting since it's completed now */
+        // 从消息传输中删除已完成的消息
         this.messagesTransiting.remove(comm);
 
-        /* Add the received nodes to our nodes list to query */
+        // 将收到的节点添加到我们的节点列表中以进行查询
         this.addNodes(msg.getNodes());
         this.askNodesorFinish();
     }
 
     /**
-     * A node does not respond or a packet was lost, we set this node as failed
+     * 节点没有响应或数据包丢失，我们将此节点设置为丢失
      *
      * @param comm
      *
@@ -290,7 +284,7 @@ public class NodeLookupOperation implements Operation, Receiver
     @Override
     public synchronized void timeout(int comm) throws IOException
     {
-        /* Get the node associated with this communication */
+        // 获取与此通信关联的节点
         Node n = this.messagesTransiting.get(comm);
 
         if (n == null)
@@ -298,7 +292,7 @@ public class NodeLookupOperation implements Operation, Receiver
             return;
         }
 
-        /* Mark this node as failed and inform the routing table that it is unresponsive */
+        // 将此节点标记为丢失，并通知路由表它没有响应
         this.nodes.put(n, FAILED);
         this.localNode.getRoutingTable().setUnresponsiveContact(n);
         this.messagesTransiting.remove(comm);

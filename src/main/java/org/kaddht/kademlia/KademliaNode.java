@@ -12,9 +12,9 @@ import org.kaddht.kademlia.node.Node;
 import org.kaddht.kademlia.routing.KademliaRoutingTable;
 
 /**
- * The main Kademlia Node on the network, this node manages everything for this local system.
+ * 网络上的主要Kademlia节点，此节点管理此本地系统的所有内容
  *
- * @author Lontow
+ * @author 刘朕龙
  * @since 20201020
  *
  */
@@ -22,53 +22,53 @@ public interface KademliaNode
 {
 
     /**
-     * Schedule the recurring refresh operation
+     * 开始定期刷新操作
      */
     public void startRefreshOperation();
 
     /**
-     * Stop the recurring refresh operation
+     * 停止定期刷新操作
      */
     public void stopRefreshOperation();
 
     /**
-     * @return Node The local node for this system
+     * @return Node 此系统的本地节点
      */
     public Node getNode();
 
     /**
-     * @return The KadServer used to send/receive messages
+     * @return KadServer用于发送/接收消息
      */
     public KadServer getServer();
 
     /**
-     * @return The DHT for this kad instance
+     * @return 此kad实例的DHT
      */
     public KademliaDHT getDHT();
 
     /**
-     * @return The current KadConfiguration object being used
+     * @return 当前使用的KadConfiguration对象
      */
     public KadConfiguration getCurrentConfiguration();
 
     /**
-     * Connect to an existing peer-to-peer network.
+     * 连接到现有的对等网络
      *
-     * @param n The known node in the peer-to-peer network
+     * @param n 对等网络中的已知节点
      *
-     * @throws RoutingException      If the bootstrap node could not be contacted
-     * @throws IOException           If a network error occurred
-     * @throws IllegalStateException If this object is closed
+     * @throws RoutingException      无法联系引导节点
+     * @throws IOException           发生网络错误
+     * @throws IllegalStateException 此对象关闭
      * */
     public void bootstrap(Node n) throws IOException, RoutingException;
 
     /**
-     * Stores the specified value under the given key
-     * This value is stored on K nodes on the network, or all nodes if there are > K total nodes in the network
+     * 在给定的 key 下存储指定的值
+     * 该值存储在网络上的K个节点上，如果网络中的节点总数> K，则存储在所有节点上
      *
-     * @param content The content to put onto the DHT
+     * @param content 要放入DHT的内容
      *
-     * @return Integer How many nodes the content was stored on
+     * @return Integer 内容存储在多少个节点上
      *
      * @throws java.io.IOException
      *
@@ -76,12 +76,12 @@ public interface KademliaNode
     public int put(KadContent content) throws IOException;
 
     /**
-     * Stores the specified value under the given key
-     * This value is stored on K nodes on the network, or all nodes if there are > K total nodes in the network
+     * 在给定的 key 下存储指定的值
+     * 该值存储在网络上的K个节点上，如果网络中的节点总数> K，则存储在所有节点上
      *
-     * @param entry The StorageEntry with the content to put onto the DHT
+     * @param entry 带有要放入DHT的内容的StorageEntry
      *
-     * @return Integer How many nodes the content was stored on
+     * @return Integer 内容存储在多少个节点上
      *
      * @throws java.io.IOException
      *
@@ -89,20 +89,20 @@ public interface KademliaNode
     public int put(KadStorageEntry entry) throws IOException;
 
     /**
-     * Store a content on the local node's DHT
+     * 将内容存储在本地节点的DHT上
      *
-     * @param content The content to put on the DHT
+     * @param content
      *
      * @throws java.io.IOException
      */
     public void putLocally(KadContent content) throws IOException;
 
     /**
-     * Get some content stored on the DHT
+     * 获取一些存储在DHT上的内容
      *
-     * @param param The parameters used to search for the content
+     * @param param 用于搜索内容的参数
      *
-     * @return DHTContent The content
+     * @return DHTContent
      *
      * @throws java.io.IOException
      * @throws org.kaddht.kademlia.exceptions.ContentNotFoundException
@@ -110,45 +110,25 @@ public interface KademliaNode
     public KadStorageEntry get(GetParameter param) throws NoSuchElementException, IOException, ContentNotFoundException;
 
     /**
-     * Allow the user of the System to call refresh even out of the normal Kad refresh timing
      *
      * @throws java.io.IOException
      */
     public void refresh() throws IOException;
 
-    /**
-     * @return String The ID of the owner of this local network
-     */
+
     public String getOwnerId();
 
-    /**
-     * @return Integer The port on which this kad instance is running
-     */
     public int getPort();
 
-    /**
-     * Here we handle properly shutting down the Kademlia instance
-     *
-     * @param saveState Whether to save the application state or not
-     *
-     * @throws java.io.FileNotFoundException
-     */
+
     public void shutdown(final boolean saveState) throws IOException;
 
-    /**
-     * Saves the node state to a text file
-     *
-     * @throws java.io.FileNotFoundException
-     */
+
     public void saveKadState() throws IOException;
 
-    /**
-     * @return The routing table for this node.
-     */
+
     public KademliaRoutingTable getRoutingTable();
 
-    /**
-     * @return The statistician that manages all statistics
-     */
+
     public Statistician getStatistician();
 }

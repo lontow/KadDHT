@@ -27,15 +27,14 @@ import org.kaddht.kademlia.node.Node;
 import org.kaddht.kademlia.util.RouteLengthChecker;
 
 /**
- * Looks up a specified identifier and returns the value associated with it
+ * 查找指定的标识符并返回与其关联的值
  *
- * @author Lontow
- * @since 20201020
+ * @author 刘朕龙
+ * @since 20201019
  */
 public class ContentLookupOperation implements Operation, Receiver
 {
 
-    /* Constants */
     private static final Byte UNASKED = (byte) 0x00;
     private static final Byte AWAITING = (byte) 0x01;
     private static final Byte ASKED = (byte) 0x02;
@@ -52,13 +51,13 @@ public class ContentLookupOperation implements Operation, Receiver
 
     private final SortedMap<Node, Byte> nodes;
 
-    /* Tracks messages in transit and awaiting reply */
+    // 跟踪传输中的消息并等待回复
     private final Map<Integer, Node> messagesTransiting;
 
-    /* Used to sort nodes */
+    // 用于排序节点
     private final Comparator comparator;
 
-    /* Statistical information */
+    // 统计信息
     private final RouteLengthChecker routeLengthChecker;
 
     
@@ -71,12 +70,12 @@ public class ContentLookupOperation implements Operation, Receiver
     /**
      * @param server
      * @param localNode
-     * @param params    The parameters to search for the content which we need to find
+     * @param params    搜索所需内容的参数
      * @param config
      */
     public ContentLookupOperation(KadServer server, KadPeer localNode, GetParameter params, KadConfiguration config)
     {
-        /* Construct our lookup message */
+        // 构造查询消息
         this.lookupMessage = new ContentLookupMessage(localNode.getNode(), params);
 
         this.server = server;
@@ -84,41 +83,39 @@ public class ContentLookupOperation implements Operation, Receiver
         this.config = config;
 
         /**
-         * We initialize a TreeMap to store nodes.
-         * This map will be sorted by which nodes are closest to the lookupId
+         * 我们初始化一个TreeMap来存储节点
+         * 此 map 将根据最接近lookupId的节点进行排序
          */
         this.comparator = new KeyComparator(params.getKey());
         this.nodes = new TreeMap(this.comparator);
     }
 
     /**
-     * @throws java.io.IOException
-     * @throws org.kaddht.kademlia.exceptions.RoutingException
+     * @throws java.io.IOException,org.kaddht.kademlia.exceptions.RoutingException
      */
     @Override
     public synchronized void execute() throws IOException, RoutingException
     {
         try
         {
-            /* Set the local node as already asked */
+            // 按照要求设置本地节点
             nodes.put(this.localNode.getNode(), ASKED);
 
             /**
-             * We add all nodes here instead of the K-Closest because there may be the case that the K-Closest are offline
-             * - The operation takes care of looking at the K-Closest.
+             * 在此处添加所有节点
              */
             List<Node> allNodes = this.localNode.getRoutingTable().getAllNodes();
             this.addNodes(allNodes);
             
-            /* Also add the initial set of nodes to the routeLengthChecker */
+            // 将初始节点集添加到routeLengthChecker
             this.routeLengthChecker.addInitialNodes(allNodes);
 
             /**
-             * If we haven't found the requested amount of content as yet,
-             * keey trying until config.operationTimeout() time has expired
+             * 未找到请求的内容，继续尝试直到config.operationTimeout（）时间到期
              */
             int totalTimeWaited = 0;
-            int timeInterval = 10;     // We re-check every n milliseconds
+            int timeInterval = 10;
+                // 我们每n毫秒重新检查一次
             while (totalTimeWaited < this.config.operationTimeout())
             {
                 if (!this.askNodesorFinish() && !isContentFound)
@@ -139,7 +136,7 @@ public class ContentLookupOperation implements Operation, Receiver
     }
 
     /**
-     * Add nodes from this list to the set of nodes to lookup
+     * 将列表中的节点添加到要查找的节点集中
      *
      * @param list The list from which to add nodes
      */
@@ -147,7 +144,6 @@ public class ContentLookupOperation implements Operation, Receiver
     {
         for (Node o : list)
         {
-            /* If this node is not in the list, add the node */
             if (!nodes.containsKey(o))
             {
                 nodes.put(o, UNASKED);
@@ -156,39 +152,36 @@ public class ContentLookupOperation implements Operation, Receiver
     }
 
     /**
-     * Asks some of the K closest nodes seen but not yet queried.
-     * Assures that no more than DefaultConfiguration.CONCURRENCY messages are in transit at a time
-     *
-     * This method should be called every time a reply is received or a timeout occurs.
-     *
-     * If all K closest nodes have been asked and there are no messages in transit,
-     * the algorithm is finished.
+     * 询问已找到但尚未查询的K个最接近的节点。
+     * 确保一次传输的消息不超过DefaultConfiguration.CONCURRENCY。
+     * 每当接收到答复或发生超时时，都应调用此方法。
+     * 如果已经询问了所有K个最近的节点，并且没有传输中的消息，则算法完成
      *
      * @return <code>true</code> if finished OR <code>false</code> otherwise
      */
     private boolean askNodesorFinish() throws IOException
     {
-        /* If >= CONCURRENCY nodes are in transit, don't do anything */
+        // 如果 >= CONCURRENCY节点在传输中，则不执行任何操作
         if (this.config.maxConcurrentMessagesTransiting() <= this.messagesTransiting.size())
         {
             return false;
         }
 
-        /* Get unqueried nodes among the K closest seen that have not FAILED */
+        // 获取未失败的K个最接近的未查询节点
         List<Node> unasked = this.closestNodesNotFailed(UNASKED);
 
         if (unasked.isEmpty() && this.messagesTransiting.isEmpty())
         {
-            /* We have no unasked nodes nor any messages in transit, we're finished! */
+            // 所有节点已询问，所有信息已传输
             return true;
         }
 
-        /* Sort nodes according to criteria */
+        // 根据条件对节点进行排序
         Collections.sort(unasked, this.comparator);
 
         /**
-         * Send messages to nodes in the list;
-         * making sure than no more than CONCURRENCY messsages are in transit
+         * 发送消息到列表中的节点
+         * 确保正在传输的消息不超过CONCURRENT条
          */
         for (int i = 0; (this.messagesTransiting.size() < this.config.maxConcurrentMessagesTransiting()) && (i < unasked.size()); i++)
         {
@@ -200,17 +193,17 @@ public class ContentLookupOperation implements Operation, Receiver
             this.messagesTransiting.put(comm, n);
         }
 
-        /* We're not finished as yet, return false */
+        // 未完成
         return false;
     }
 
     /**
-     * Find The K closest nodes to the target lookupId given that have not FAILED.
-     * From those K, get those that have the specified status
+     * 给定尚未找到目标的，与目标lookupId最接近的K个节点。
+     * 从那些 K桶中获得具有指定状态的那些
      *
-     * @param status The status of the nodes to return
+     * @param status 要返回的节点的状态
      *
-     * @return A List of the closest nodes
+     * @return 最近的节点列表
      */
     private List<Node> closestNodesNotFailed(Byte status)
     {
@@ -223,7 +216,6 @@ public class ContentLookupOperation implements Operation, Receiver
             {
                 if (status.equals(e.getValue()))
                 {
-                    /* We got one with the required status, now add it */
                     closestNodes.add((Node) e.getKey());
                 }
 
@@ -247,13 +239,13 @@ public class ContentLookupOperation implements Operation, Receiver
 
         if (incoming instanceof ContentMessage)
         {
-            /* The reply received is a content message with the required content, take it in */
+            // 收到回复是带有所需内容的内容消息
             ContentMessage msg = (ContentMessage) incoming;
 
-            /* Add the origin node to our routing table */
+            // 将原始节点添加到我们的路由表中
             this.localNode.getRoutingTable().insert(msg.getOrigin());
 
-            /* Get the Content and check if it satisfies the required parameters */
+            // 获取内容并检查其是否满足必需的参数
             KadStorageEntry content = msg.getContent();
             System.out.println("get Message"+content);
             this.contentFound = content;
@@ -261,30 +253,30 @@ public class ContentLookupOperation implements Operation, Receiver
         }
         else
         {
-            /* The reply received is a NodeReplyMessage with nodes closest to the content needed */
+            // 收到的回复是一个NodeReplyMessage，其节点与所需内容最接近
             NodeReplyMessage msg = (NodeReplyMessage) incoming;
 
-            /* Add the origin node to our routing table */
+            // 将原始节点添加到我们的路由表中
             Node origin = msg.getOrigin();
             this.localNode.getRoutingTable().insert(origin);
 
-            /* Set that we've completed ASKing the origin node */
+            // 设置我们已经完成了对原始节点的询问
             this.nodes.put(origin, ASKED);
 
-            /* Remove this msg from messagesTransiting since it's completed now */
+            // 从消息传输中删除已完成的该消息
             this.messagesTransiting.remove(comm);
             
-            /* Add the received nodes to the routeLengthChecker */
+            // 将收到的节点添加到routeLengthChecker
             this.routeLengthChecker.addNodes(msg.getNodes(), origin);
 
-            /* Add the received nodes to our nodes list to query */
+            // 将收到的节点添加到我们的节点列表中以进行查询
             this.addNodes(msg.getNodes());
             this.askNodesorFinish();
         }
     }
 
     /**
-     * A node does not respond or a packet was lost, we set this node as failed
+     * 节点没有响应或数据包丢失，将此节点设置为失败
      *
      * @param comm
      *
@@ -293,7 +285,7 @@ public class ContentLookupOperation implements Operation, Receiver
     @Override
     public synchronized void timeout(int comm) throws IOException
     {
-        /* Get the node associated with this communication */
+        // 获取与此通信关联的节点
         Node n = this.messagesTransiting.get(new Integer(comm));
 
         if (n == null)
@@ -301,7 +293,7 @@ public class ContentLookupOperation implements Operation, Receiver
             throw new UnknownMessageException("Unknown comm: " + comm);
         }
 
-        /* Mark this node as failed and inform the routing table that it's unresponsive */
+        // 将此节点标记为失败，并通知路由表无响应
         this.nodes.put(n, FAILED);
         this.localNode.getRoutingTable().setUnresponsiveContact(n);
         this.messagesTransiting.remove(comm);
@@ -310,7 +302,7 @@ public class ContentLookupOperation implements Operation, Receiver
     }
     
     /**
-     * @return Whether the content was found or not.
+     * @return 是否找到内容
      */
     public boolean isContentFound()
     {
@@ -318,7 +310,7 @@ public class ContentLookupOperation implements Operation, Receiver
     }
 
     /**
-     * @return The list of all content found during the lookup operation
+     * @return 查找操作期间找到的所有内容的列表
      *
      * @throws org.kaddht.kademlia.exceptions.ContentNotFoundException
      */
@@ -335,7 +327,7 @@ public class ContentLookupOperation implements Operation, Receiver
     }
 
     /**
-     * @return How many hops it took in order to get to the content.
+     * @return 到达内容所花费的跳数
      */
     public int routeLength()
     {

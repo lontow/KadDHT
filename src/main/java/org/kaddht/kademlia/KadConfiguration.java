@@ -1,34 +1,33 @@
 package org.kaddht.kademlia;
 
 /**
- * Interface that defines a KadConfiguration object
+ * 定义KadConfiguration对象的接口
  *
- * @author Lontow
- * @since 20201020
+ * @author 张文令
+ * @since 20201010
  */
 public interface KadConfiguration
 {
 
     /**
-     * @return Interval in milliseconds between execution of RestoreOperations.
+     * @return Interval 执行 RestoreOperations 的毫秒数
      */
     public long restoreInterval();
 
     /**
-     * If no reply received from a node in this period (in milliseconds)
-     * consider the node unresponsive.
+     * 如果在此期间（以毫秒为单位）未收到来自节点的答复，则认为该节点无响应
      *
-     * @return The time it takes to consider a node unresponsive
+     * @return 认为节点无响应所需的时间
      */
     public long responseTimeout();
 
     /**
-     * @return Maximum number of milliseconds for performing an operation.
+     * @return 执行操作的最大毫秒数
      */
     public long operationTimeout();
 
     /**
-     * @return Maximum number of concurrent messages in transit.
+     * @return 传输中的最大并发消息数
      */
     public int maxConcurrentMessagesTransiting();
 
@@ -38,17 +37,17 @@ public interface KadConfiguration
     public int k();
 
     /**
-     * @return Size of replacement cache.
+     * @return 替换缓存的大小
      */
     public int replacementCacheSize();
 
     /**
-     * @return # of times a node can be marked as stale before it is actually removed.
+     * @return 在实际删除某个节点之前，可以将其标记为过时的次数
      */
     public int stale();
 
     /**
-     * Creates the folder in which this node data is to be stored.
+     * 创建要在其中存储此节点数据的文件夹
      *
      * @param ownerId
      *
@@ -57,7 +56,7 @@ public interface KadConfiguration
     public String getNodeDataFolder(String ownerId);
 
     /**
-     * @return Whether we're in a testing or production system.
+     * @return 返回我们是否在测试系统中
      */
     public boolean isTesting();
 }

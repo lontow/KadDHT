@@ -7,11 +7,11 @@ import org.kaddht.kademlia.KademliaNode;
 import org.kaddht.kademlia.node.KademliaId;
 
 /**
- * At each time interval t, nodes need to refresh their K-Buckets
- * This operation takes care of refreshing this node's K-Buckets
+ * 在每个时间间隔t，节点需要刷新其 K-Buckets
+ * 此操作需要刷新此节点的 K-Buckets
  *
- * @author Lontow
- * @created 20140224
+ * @author 张文令
+ * @created 20201019
  */
 public class BucketRefreshOperation implements Operation
 {
@@ -28,12 +28,11 @@ public class BucketRefreshOperation implements Operation
     }
 
     /**
-     * Each bucket need to be refreshed at every time interval t.
-     * Find an identifier in each bucket's range, use it to look for nodes closest to this identifier
-     * allowing the bucket to be refreshed.
+     * 每个存储桶都需要在每个时间间隔t刷新
+     * 在每个存储桶范围内找到一个标识符，使用它查找最接近该标识符的节点
+     * 允许刷新存储桶
+     * 然后对每个生成的NodeId执行NodeLookupOperation，这将找到该ID的K最近节点，并更新必要的K桶
      *
-     * Then Do a NodeLookupOperation for each of the generated NodeIds,
-     * This will find the K-Closest nodes to that ID, and update the necessary K-Bucket
      *
      * @throws java.io.IOException
      */
@@ -42,10 +41,10 @@ public class BucketRefreshOperation implements Operation
     {
         for (int i = 1; i < KademliaId.ID_LENGTH; i++)
         {
-            /* Construct a NodeId that is i bits away from the current node Id */
+            // 构造一个与当前节点 ID 相距 i 位的 NodeId
             final KademliaId current = this.localNode.getNode().getNodeId().generateNodeIdByDistance(i);
 
-            /* Run the Node Lookup Operation, each in a different thread to speed up things */
+            // 运行节点查找操作，在不同的线程中运行以加快速度
             new Thread()
             {
                 @Override

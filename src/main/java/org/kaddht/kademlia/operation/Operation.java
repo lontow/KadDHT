@@ -4,16 +4,16 @@ import java.io.IOException;
 import org.kaddht.kademlia.exceptions.RoutingException;
 
 /**
- * An operation in the Kademlia routing protocol
+ * Kademlia路由协议中的操作
  *
- * @author Lontow
- * @created 20201020
+ * @author 刘朕龙
+ * @created 20201016
  */
 public interface Operation
 {
 
     /**
-     * Starts an operation and returns when the operation is finished
+     * 开始操作并在操作完成后返回
      *
      * @throws org.kaddht.kademlia.exceptions.RoutingException
      */

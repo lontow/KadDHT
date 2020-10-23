@@ -23,7 +23,7 @@ public static void main(String[] args) throws IOException, NoSuchElementExceptio
 	DHTContentImpl c = new DHTContentImpl(kad.getOwnerId(), "ASF45678947584567467");
     kad.put(c);
 
-    /* Lets retrieve the content */
+    // 查找内容
     System.out.println("Retrieving Content");
     GetParameter gp = new GetParameter(c.getKey(), DHTContentImpl.TYPE, c.getOwnerId());
     
@@ -32,11 +32,11 @@ public static void main(String[] args) throws IOException, NoSuchElementExceptio
     System.out.println("Content Found: " + new DHTContentImpl().fromSerializedForm(conte.getContent()));
     System.out.println("Content Metadata: " + conte.getContentMetadata());
 
-    /* Lets update the content and put it again */
+    // 更新内容
     c.setData("Some New Data");
     kad.put(c);
 
-    /* Lets retrieve the content */
+    // 检索内容
     System.out.println("Retrieving Content Again");
     conte = kad.get(gp);
     System.out.println("Content Found: " + new DHTContentImpl().fromSerializedForm(conte.getContent()));
