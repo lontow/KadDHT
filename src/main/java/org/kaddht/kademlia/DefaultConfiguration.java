@@ -5,15 +5,17 @@ import com.google.gson.annotations.SerializedName;
 import java.io.File;
 
 /**
- * A set of Kademlia configuration parameters. Default values are
- * supplied and can be changed by the application as necessary.
+ * 一组Kademlia配置参数
+ * 具有默认值，同时可以根据需要由应用程序进行更改
  *
  */
 public class DefaultConfiguration implements KadConfiguration
 {
 
     @SerializedName("restore_interval")
-    private   long RESTORE_INTERVAL = 60 * 1000; // in milliseconds
+    private   long RESTORE_INTERVAL = 60 * 1000;
+        // 以毫秒为单位
+
     @SerializedName("response_timeout")
     private   long RESPONSE_TIMEOUT = 2000;
     @SerializedName("operation_timeout")
@@ -38,7 +40,7 @@ public class DefaultConfiguration implements KadConfiguration
 
     }
     /**
-     * Default constructor to support Gson Serialization
+     * 支持 Gson 序列化的默认构造函数
      */
     public DefaultConfiguration()
     {
@@ -90,7 +92,7 @@ public class DefaultConfiguration implements KadConfiguration
     @Override
     public String getNodeDataFolder(String ownerId)
     {
-        /* Setup the main storage folder if it doesn't exist */
+        // 设置主存储文件夹（如果其不存在）
         String path = System.getProperty("user.home") + File.separator + getLOCAL_FOLDER();
         File folder = new File(path);
         if (!folder.isDirectory())
@@ -98,14 +100,14 @@ public class DefaultConfiguration implements KadConfiguration
             folder.mkdir();
         }
 
-        /* Setup subfolder for this owner if it doesn't exist */
+        // 如果此所有者不存在，设置子文件夹
         File ownerFolder = new File(folder + File.separator + ownerId);
         if (!ownerFolder.isDirectory())
         {
             ownerFolder.mkdir();
         }
 
-        /* Return the path */
+        // 返回路径
 
         return ownerFolder.toString();
     }

@@ -12,10 +12,10 @@ import org.kaddht.kademlia.message.StoreContentMessage;
 import org.kaddht.kademlia.node.Node;
 
 /**
- * Operation that stores a DHT Content onto the K closest nodes to the content Key
+ * 将DHT内容存储到距离内容 key 最近的K个节点上的操作
  *
- * @author Lontow
- * @since 20201020
+ * @author 刘朕龙
+ * @since 20201018
  */
 public class StoreOperation implements Operation
 {
@@ -45,20 +45,19 @@ public class StoreOperation implements Operation
     @Override
     public synchronized void execute() throws IOException
     {
-        /* Get the nodes on which we need to store the content */
+        // 获取我们需要在其上存储内容的节点
         NodeLookupOperation ndlo = new NodeLookupOperation(this.server, this.localNode, this.storageEntry.getContentMetadata().getKey(), this.config);
         ndlo.execute();
         List<Node> nodes = ndlo.getClosestNodes();
 
-        /* Create the message */
+        // 构造信息
         Message msg = new StoreContentMessage(this.localNode.getNode(), this.storageEntry);
 
-        /*Store the message on all of the K-Nodes*/
-        for (Node n : nodes)
-        {
+        // 将消息存储在所有K节点上K-Nodes
+        for (Node n : nodes) {
             if (n.equals(this.localNode.getNode()))
             {
-                /* Store the content locally */
+                // 本地存储内容
                 this.localDht.store(this.storageEntry);
             }
             else
@@ -72,7 +71,7 @@ public class StoreOperation implements Operation
     }
 
     /**
-     * @return The number of nodes that have stored this content
+     * @return 已存储此内容的节点数
      *
      * @todo Implement this method
      */

@@ -20,9 +20,9 @@ public class PingOperation implements Operation
     private final Node toPing;
 
     /**
-     * @param server The Kademlia server used to send & receive messages
-     * @param local  The local node
-     * @param toPing The node to send the ping message to
+     * @param server Kademlia服务器用于发送和接收消息
+     * @param local  本地节点
+     * @param toPing 将ping消息发送到的节点
      */
     public PingOperation(KadServer server, Node local, Node toPing)
     {
@@ -34,6 +34,6 @@ public class PingOperation implements Operation
     @Override
     public void execute() throws IOException, RoutingException
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

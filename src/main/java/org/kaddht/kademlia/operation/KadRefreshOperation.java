@@ -7,10 +7,10 @@ import org.kaddht.kademlia.KademliaNode;
 import org.kaddht.kademlia.dht.KademliaDHT;
 
 /**
- * An operation that handles refreshing the entire Kademlia Systems including buckets and content
+ * 用来刷新整个Kademlia系统（包括存储桶和内容）的操作A
  *
- * @author Lontow
- * @since 20201020
+ * @author 刘朕龙
+ * @since 20201015
  */
 public class KadRefreshOperation implements Operation
 {
@@ -31,10 +31,10 @@ public class KadRefreshOperation implements Operation
     @Override
     public void execute() throws IOException
     {
-        /* Run our BucketRefreshOperation to refresh buckets */
+        // 运行存储桶刷新操作以刷新存储桶
         new BucketRefreshOperation(this.server, this.localNode, this.config).execute();
 
-        /* After buckets have been refreshed, we refresh content */
+        // 刷新内容
         new ContentRefreshOperation(this.server, this.localNode, this.dht, this.config).execute();
     }
 }

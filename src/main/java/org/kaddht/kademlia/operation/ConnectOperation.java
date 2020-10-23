@@ -1,7 +1,7 @@
 /**
- * @author Lontow
+ * @author 刘朕龙
  * @created 20201020
- * @desc Operation that handles connecting to an existing Kademlia network using a bootstrap node
+ * @desc 使用引导节点处理连接到现有 Kademlia 网络的操作
  */
 package org.kaddht.kademlia.operation;
 
@@ -20,7 +20,8 @@ import org.kaddht.kademlia.node.Node;
 public class ConnectOperation implements Operation, Receiver
 {
 
-    public static final int MAX_CONNECT_ATTEMPTS = 5;       // Try 5 times to connect to a node
+    public static final int MAX_CONNECT_ATTEMPTS = 5;
+     // 连接每个节点尝试五次
 
     private final KadServer server;
     private final KademliaNode localNode;
@@ -31,9 +32,9 @@ public class ConnectOperation implements Operation, Receiver
     private int attempts;
 
     /**
-     * @param server    The message server used to send/receive messages
+     * @param server    用于发送/接收消息的消息服务器
      * @param local     The local node
-     * @param bootstrap Node to use to bootstrap the local node onto the network
+     * @param bootstrap 用于将本地节点引导到网络上的节点
      * @param config
      */
     public ConnectOperation(KadServer server, KademliaNode local, Node bootstrap, KadConfiguration config)
@@ -49,17 +50,18 @@ public class ConnectOperation implements Operation, Receiver
     {
         try
         {
-            /* Contact the bootstrap node */
+            // 联系引导节点
             this.error = true;
             this.attempts = 0;
             Message m = new ConnectMessage(this.localNode.getNode());
 
-            /* Send a connect message to the bootstrap node */
+            // 将连接消息发送到引导节点
             server.sendMessage(this.bootstrapNode, m, this);
 
-            /* If we haven't finished as yet, wait for a maximum of config.operationTimeout() time */
+            // 最长等待config.operationTimeout（）时间
             int totalTimeWaited = 0;
-            int timeInterval = 50;     // We re-check every 300 milliseconds
+            int timeInterval = 50;
+                // 我们每300毫秒重新检查一次
             while (totalTimeWaited < this.config.operationTimeout())
             {
                 if (error)
@@ -74,18 +76,18 @@ public class ConnectOperation implements Operation, Receiver
             }
             if (error)
             {
-                /* If we still haven't received any responses by then, do a routing timeout */
+                // 超时
                 throw new RoutingException("ConnectOperation: Bootstrap node did not respond: " + bootstrapNode);
             }
 
-            /* Perform lookup for our own ID to get nodes close to us */
+            // 查找我们自己的ID，以使节点离我们更近
             Operation lookup = new NodeLookupOperation(this.server, this.localNode, this.localNode.getNode().getNodeId(), this.config);
             lookup.execute();
 
             /**
-             * Refresh buckets to get a good routing table
-             * After the above lookup operation, K nodes will be in our routing table,
-             * Now we try to populate all of our buckets.
+             * 刷新存储桶以获得良好的路由表
+             * 完成上述查找操作后，K个节点将位于我们的路由表中
+             * 尝试填充所有存储桶
              */
             new BucketRefreshOperation(this.server, this.localNode, this.config).execute();
         }
@@ -96,29 +98,28 @@ public class ConnectOperation implements Operation, Receiver
     }
 
     /**
-     * Receives an AcknowledgeMessage from the bootstrap node.
+     * 从引导节点接收AcknowledgeMessage
      *
      * @param comm
      */
     @Override
     public synchronized void receive(Message incoming, int comm)
     {
-        /* The incoming message will be an acknowledgement message */
+        // 接受确认消息
         AcknowledgeMessage msg = (AcknowledgeMessage) incoming;
 
-        /* The bootstrap node has responded, insert it into our space */
+        // 引导节点响应后，将其插入我们的空间
         this.localNode.getRoutingTable().insert(this.bootstrapNode);
 
-        /* We got a response, so the error is false */
+        // 得到回应
         error = false;
 
-        /* Wake up any waiting thread */
+        // 唤醒等待的进程
         notify();
     }
 
     /**
-     * Resends a ConnectMessage to the boot strap node a maximum of MAX_ATTEMPTS
-     * times.
+     * 连接消息最多重新发送到引导节点 MAX_ATTEMPTS 次
      *
      * @param comm
      *
@@ -133,7 +134,6 @@ public class ConnectOperation implements Operation, Receiver
         }
         else
         {
-            /* We just exit, so notify all other threads that are possibly waiting */
             notify();
         }
     }

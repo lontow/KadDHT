@@ -14,10 +14,10 @@ import org.kaddht.kademlia.message.StoreContentMessage;
 import org.kaddht.kademlia.node.Node;
 
 /**
- * Refresh/Restore the data on this node by sending the data to the K-Closest nodes to the data
+ * 通过将数据发送到数据的K-Closest节点来刷新/恢复该节点上的数据
  *
- * @author Lontow
- * @since 20201020
+ * @author 张文令
+ * @since 20201010
  */
 public class ContentRefreshOperation implements Operation
 {
@@ -36,52 +36,51 @@ public class ContentRefreshOperation implements Operation
     }
 
     /**
-     * For each content stored on this DHT, distribute it to the K closest nodes
- Also delete the content if this node is no longer one of the K closest nodes
-
- We assume that our KadRoutingTable is updated, and we can get the K closest nodes from that table
+     * 对于此 DHT上存储的每个内容，将其分发到 K个最近的节点。
+     * 如果此节点不再是K个最近的节点之一，则删除该内容。
+     * 此时假设我们的 KadRoutingTable 已更新，我们可以从该表中获取K个最近的节点
      *
      * @throws java.io.IOException
      */
     @Override
     public void execute() throws IOException
     {
-        /* Get a list of all storage entries for content */
+        // 获取内容的所有存储条目的列表
         List<KademliaStorageEntryMetadata> entries = this.dht.getStorageEntries();
 
-        /* If a content was last republished before this time, then we need to republish it */
+        // 如果某个内容在此时间之前最后一次重新上传，那么我们需要重新上传它
         final long minRepublishTime = (System.currentTimeMillis() / 1000L) - this.config.restoreInterval();
 
-        /* For each storage entry, distribute it */
+        // 分发每个存储条目
         for (KademliaStorageEntryMetadata e : entries)
         {
-            /* Check last update time of this entry and only distribute it if it has been last updated > 1 hour ago */
+            // 检查此条目的上次更新时间，仅在最近一次 >1小时之前将其分发
             if (e.lastRepublished() > minRepublishTime)
             {
                 continue;
             }
 
-            /* Set that this content is now republished */
+            // 设置此内容现在重新上传
             e.updateLastRepublished();
 
-            /* Get the K closest nodes to this entries */
+            // 获取最接近该条目的K个节点
             List<Node> closestNodes = this.localNode.getRoutingTable().findClosest(e.getKey(), this.config.k());
 
-            /* Create the message */
+            // 创建信息
             Message msg = new StoreContentMessage(this.localNode.getNode(), dht.get(e));
 
-            /*Store the message on all of the K-Nodes*/
+            // 将消息存储在所有K节点上
             for (Node n : closestNodes)
             {
-                /*We don't need to again store the content locally, it's already here*/
+                // 无须存储，因为已经存在
                 if (!n.equals(this.localNode.getNode()))
                 {
-                    /* Send a contentstore operation to the K-Closest nodes */
+                    // 将内容存储库操作发送到K-Closest节点
                     this.server.sendMessage(n, msg, null);
                 }
             }
 
-            /* Delete any content on this node that this node is not one of the K-Closest nodes to */
+            // 删除此节点上不是该K-Closest节点之一的任何内容
             try
             {
                 if (!closestNodes.contains(this.localNode.getNode()))
@@ -91,7 +90,6 @@ public class ContentRefreshOperation implements Operation
             }
             catch (ContentNotFoundException cnfe)
             {
-                /* It would be weird if the content is not found here */
                 System.err.println("ContentRefreshOperation: Removing content from local node, content not found... Message: " + cnfe.getMessage());
             }
         }
