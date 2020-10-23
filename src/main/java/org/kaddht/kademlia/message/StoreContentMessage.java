@@ -9,7 +9,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
- * A StoreContentMessage used to send a store message to a node
  *
  * @author Lontow
  * @since 20201020
@@ -23,8 +22,8 @@ public class StoreContentMessage implements Message
     private Node origin;
 
     /**
-     * @param origin  Where the message came from
-     * @param content The content to be stored
+     * @param origin
+     * @param content
      *
      */
     public StoreContentMessage(Node origin, KadStorageEntry content)

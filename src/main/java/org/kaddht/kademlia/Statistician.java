@@ -10,7 +10,7 @@ import java.text.DecimalFormat;
  * @author Lontow
  * @since 20201020
  */
-public class Statistician implements KadStatistician
+public class Statistician
 {
 
     /* How much data was sent and received by the server over the network */
@@ -25,24 +25,15 @@ public class Statistician implements KadStatistician
     private long totalContentLookupTime;
     private long totalRouteLength;
 
-    
-    {
-        this.totalDataSent = 0;
-        this.totalDataReceived = 0;
-        this.bootstrapTime = 0;
-        this.numContentLookups = 0;
-        this.totalContentLookupTime = 0;
-        this.totalRouteLength = 0;
-    }
 
-    @Override
+
     public void sentData(long size)
     {
         this.totalDataSent += size;
         this.numDataSent++;
     }
 
-    @Override
+
     public long getTotalDataSent()
     {
         if (this.totalDataSent == 0)
@@ -53,14 +44,13 @@ public class Statistician implements KadStatistician
         return this.totalDataSent / 1000L;
     }
 
-    @Override
     public void receivedData(long size)
     {
         this.totalDataReceived += size;
         this.numDataReceived++;
     }
 
-    @Override
+
     public long getTotalDataReceived()
     {
         if (this.totalDataReceived == 0)
@@ -70,19 +60,19 @@ public class Statistician implements KadStatistician
         return this.totalDataReceived / 1000L;
     }
 
-    @Override
+
     public void setBootstrapTime(long time)
     {
         this.bootstrapTime = time;
     }
 
-    @Override
+
     public long getBootstrapTime()
     {
         return this.bootstrapTime / 1000000L;
     }
 
-    @Override
+
     public void addContentLookup(long time, int routeLength, boolean isSuccessful)
     {
         if (isSuccessful)
@@ -97,25 +87,23 @@ public class Statistician implements KadStatistician
         }
     }
 
-    @Override
+
     public int numContentLookups()
     {
         return this.numContentLookups;
     }
 
-    @Override
+
     public int numFailedContentLookups()
     {
         return this.numFailedContentLookups;
     }
 
-    @Override
+
     public long totalContentLookupTime()
     {
         return this.totalContentLookupTime;
     }
-
-    @Override
     public double averageContentLookupTime()
     {
         if (this.numContentLookups == 0)
@@ -128,9 +116,9 @@ public class Statistician implements KadStatistician
         return new Double(df.format(avg));
     }
 
-    @Override
+
     public double averageContentLookupRouteLength()
-    {
+        {
         if (this.numContentLookups == 0)
         {
             return 0D;
@@ -140,38 +128,37 @@ public class Statistician implements KadStatistician
         return new Double(df.format(avg));
     }
 
-    @Override
     public String toString()
     {
-        StringBuilder sb = new StringBuilder("Statistician: [");
+        StringBuilder sb = new StringBuilder("统计信息: [");
 
-        sb.append("Bootstrap Time: ");
+        sb.append("\nBootstrap Time: ");
         sb.append(this.getBootstrapTime());
         sb.append("; ");
 
-        sb.append("Data Sent: ");
+        sb.append("\nData Sent: ");
         sb.append("(");
         sb.append(this.numDataSent);
         sb.append(") ");
         sb.append(this.getTotalDataSent());
         sb.append(" bytes; ");
 
-        sb.append("Data Received: ");
+        sb.append("\nData Received: ");
         sb.append("(");
         sb.append(this.numDataReceived);
         sb.append(") ");
         sb.append(this.getTotalDataReceived());
         sb.append(" bytes; ");
 
-        sb.append("Num Content Lookups: ");
+        sb.append("\nnum Content Lookups: ");
         sb.append(this.numContentLookups());
         sb.append("; ");
 
-        sb.append("Avg Content Lookup Time: ");
+        sb.append("\nAvg Content Lookup Time: ");
         sb.append(this.averageContentLookupTime());
         sb.append("; ");
 
-        sb.append("Avg Content Lookup Route Lth: ");
+        sb.append("\nAvg Content Lookup Route Lth: ");
         sb.append(this.averageContentLookupRouteLength());
         sb.append("; ");
 

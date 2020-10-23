@@ -7,7 +7,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
- * A message sent to another node requesting to connect to them.
+ * 连接消息
  *
  * @author Lontow
  * @created 20201020

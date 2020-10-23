@@ -67,7 +67,7 @@ public class KadPeer implements KademliaNode
     private final transient MessageFactory messageFactory;
 
     /* Statistics */
-    private final transient KadStatistician statistician;
+    private final transient Statistician statistician;
 
     
     {
@@ -405,7 +405,7 @@ public class KadPeer implements KademliaNode
     }
 
     @Override
-    public KadStatistician getStatistician()
+    public Statistician getStatistician()
     {
         return this.statistician;
     }

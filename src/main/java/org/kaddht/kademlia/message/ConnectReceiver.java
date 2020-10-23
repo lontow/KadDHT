@@ -6,7 +6,7 @@ import org.kaddht.kademlia.KademliaNode;
 import java.io.IOException;
 
 /**
- * Receives a ConnectMessage and sends an AcknowledgeMessage as reply.
+ * 连接和确认
  *
  * @author Lontow
  * @created 20140219

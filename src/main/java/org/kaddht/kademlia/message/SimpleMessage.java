@@ -5,15 +5,13 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
- * A simple message used for testing the system; Default message constructed if the message type sent is not available
  *
  * @author Lontow
- * @created 20140217
+ * @created 20201020
  */
 public class SimpleMessage implements Message
 {
 
-    /* Message constants */
     public static final byte CODE = 0x07;
 
     private String content;

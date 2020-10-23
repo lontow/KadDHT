@@ -3,7 +3,7 @@ package org.kaddht.kademlia.message;
 import java.io.IOException;
 
 /**
- * A receiver waits for incoming messages and perform some action when the message is received
+ *Receiver
  *
  * @author Lontow
  * @created 20201020
@@ -12,22 +12,21 @@ public interface Receiver
 {
 
     /**
-     * Message is received, now handle it
+     * 消息处理函数
      *
-     * @param conversationId The ID of this conversation, used for further conversations
-     * @param incoming       The incoming
+     * @param conversationId
+     * @param incoming
      *
      * @throws java.io.IOException
      */
     public void receive(Message incoming, int conversationId) throws IOException;
 
     /**
-     * If no reply is received in <code>MessageServer.TIMEOUT</code> seconds for the
-     * message with communication id <code>comm</code>, the MessageServer calls this method
+     * 超时函数
      *
-     * @param conversationId The conversation ID of this communication
+     * @param conversationId
      *
-     * @throws IOException if an I/O error occurs
+     * @throws IOException
      * */
     public void timeout(int conversationId) throws IOException;
 }

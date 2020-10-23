@@ -7,8 +7,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
- * A message used to acknowledge a request from a node; can be used in many situations.
- * - Mainly used to acknowledge a connect message
+ * 回复确认消息
  *
  * @author Lontow
  * @created 20201020

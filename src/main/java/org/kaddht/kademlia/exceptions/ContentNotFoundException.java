@@ -1,7 +1,7 @@
 package org.kaddht.kademlia.exceptions;
 
 /**
- * An exception used to indicate that a content does not exist on the DHT
+ * 文件不存在异常
  *
  * @author Lontow
  * @created 20140322

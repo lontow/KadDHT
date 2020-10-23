@@ -1,7 +1,7 @@
 package org.kaddht.kademlia.exceptions;
 
 /**
- * An exception to be thrown whenever the Kad Server is down
+ * KadServer 服务异常
  *
  * @author Lontow
  * @created 20140428

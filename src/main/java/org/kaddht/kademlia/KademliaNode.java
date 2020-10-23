@@ -150,5 +150,5 @@ public interface KademliaNode
     /**
      * @return The statistician that manages all statistics
      */
-    public KadStatistician getStatistician();
+    public Statistician getStatistician();
 }

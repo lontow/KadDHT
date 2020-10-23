@@ -4,11 +4,9 @@ public interface Message extends Streamable
 {
 
     /**
-     * The unique code for the message type, used to differentiate all messages
-     * from each other. Since this is of <code>byte</code> type there can
-     * be at most 256 different message types.
+     * 消息的唯一表示符——消息码
      *
-     * @return byte A unique code representing the message type
+     * @return 返回一个消息码
      * */
     public byte code();
 }

@@ -3,7 +3,7 @@ package org.kaddht.kademlia.exceptions;
 import java.io.IOException;
 
 /**
- * An exception to be thrown whenever there is a routing problem
+ * 路由异常
  *
  * @author Lontow
  * @created 20140219

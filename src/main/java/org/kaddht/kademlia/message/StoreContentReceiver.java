@@ -7,7 +7,7 @@ import org.kaddht.kademlia.dht.KademliaDHT;
 import java.io.IOException;
 
 /**
- * Receiver for incoming StoreContentMessage
+ *
  *
  * @author Lontow
  * @since 20201020
@@ -29,15 +29,14 @@ public class StoreContentReceiver implements Receiver
     @Override
     public void receive(Message incoming, int comm)
     {
-        /* It's a StoreContentMessage we're receiving */
         StoreContentMessage msg = (StoreContentMessage) incoming;
 
-        /* Insert the message sender into this node's routing table */
+
         this.localNode.getRoutingTable().insert(msg.getOrigin());
 
         try
         {
-            /* Store this Content into the DHT */
+            /* 保存内容 */
             this.dht.store(msg.getContent());
         }
         catch (IOException e)
@@ -51,8 +50,7 @@ public class StoreContentReceiver implements Receiver
     public void timeout(int comm)
     {
         /**
-         * This receiver only handles Receiving content when we've received the message,
-         * so no timeout will happen with this receiver.
+         *
          */
     }
 }

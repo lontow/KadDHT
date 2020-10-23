@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.util.NoSuchElementException;
 
 /**
- * Responds to a ContentLookupMessage by sending a ContentMessage containing the requested content;
- * if the requested content is not found, a NodeReplyMessage containing the K closest nodes to the request key is sent.
+ * 对　ContentLookupOperation 的回应，返回其寻找的内容
+ * 如果查询的内容不存在，返回一个　NodeReplyMessage 消息
  *
  * @author Lontow
  * @since 20201020
@@ -37,25 +37,24 @@ public class ContentLookupReceiver implements Receiver
         ContentLookupMessage msg = (ContentLookupMessage) incoming;
         this.localNode.getRoutingTable().insert(msg.getOrigin());
 
-        /* Check if we can have this data */
+        /* 检查是否含有该数据 */
         if (this.dht.contains(msg.getParameters()))
         {
             try
             {
-                /* Return a ContentMessage with the required data */
+                /* 返回一个带有该数据的消息 */
                 ContentMessage cMsg = new ContentMessage(localNode.getNode(), this.dht.get(msg.getParameters()));
                 server.reply(msg.getOrigin(), cMsg, comm);
             }
             catch (NoSuchElementException ex)
             {
-                /* @todo Not sure why this exception is thrown here, checkup the system when tests are writtem*/
+                /* */
             }
         }
         else
         {
             /**
-             * Return a the K closest nodes to this content identifier
-             * We create a NodeLookupReceiver and let this receiver handle this operation
+             * 返回距内容标识符最近的　K 个Node.通过 NodeLookupReceiver 实现
              */
             NodeLookupMessage lkpMsg = new NodeLookupMessage(msg.getOrigin(), msg.getParameters().getKey());
             new NodeLookupReceiver(server, localNode, this.config).receive(lkpMsg, comm);

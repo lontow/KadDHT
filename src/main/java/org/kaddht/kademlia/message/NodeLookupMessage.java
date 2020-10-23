@@ -8,7 +8,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
- * A message sent to other nodes requesting the K-Closest nodes to a key sent in this message.
+ *查询到某个 key 最近的 K个 Node
  *
  * @author Lontow
  * @created 20201020
@@ -22,10 +22,10 @@ public class NodeLookupMessage implements Message
     public static final byte CODE = 0x05;
 
     /**
-     * A new NodeLookupMessage to find nodes
+     * 构造函数
      *
-     * @param origin The Node from which the message is coming from
-     * @param lookup The key for which to lookup nodes for
+     * @param origin 消息发送者
+     * @param lookup 要查询　key
      */
     public NodeLookupMessage(Node origin, KademliaId lookup)
     {

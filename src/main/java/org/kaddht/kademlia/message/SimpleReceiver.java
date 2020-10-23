@@ -3,7 +3,7 @@ package org.kaddht.kademlia.message;
 import java.io.IOException;
 
 /**
- * Default receiver if none other is called
+ *默认　Receiver
  *
  * @author Lontow
  * @created 20140202

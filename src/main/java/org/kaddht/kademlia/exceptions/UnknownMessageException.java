@@ -1,7 +1,7 @@
 package org.kaddht.kademlia.exceptions;
 
 /**
- * An exception used to indicate an unknown message type or communication identifier
+ * 未知的消息类型
  *
  * @author Lontow
  * @created 20140219

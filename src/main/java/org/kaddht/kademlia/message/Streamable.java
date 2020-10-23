@@ -5,25 +5,15 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
- * A Streamable object is able to write it's state to an output stream and
- * a class implementing Streamable must be able to recreate an instance of
- * the class from an input stream. No information about class name is written
- * to the output stream so it must be known what class type is expected when
- * reading objects back in from an input stream. This gives a space
- * advantage over Serializable.
- * <p>
- * Since the exact class must be known anyway prior to reading, it is incouraged
- * that classes implementing Streamble also provide a constructor of the form:
- * <p>
- * <code>Streamable(DataInput in) throws IOException;</code>
+ * 相较于　serialize 更节省空间
+ *
  * */
 public interface Streamable
 {
 
     /**
-     * Writes the internal state of the Streamable object to the output stream
-     * in a format that can later be read by the same Streamble class using
-     * the {@link #fromStream} method.
+     * 向输出流写流式对象的内部状态
+     *
      *
      * @param out
      *
@@ -32,7 +22,7 @@ public interface Streamable
     public void toStream(DataOutputStream out) throws IOException;
 
     /**
-     * Reads the internal state of the Streamable object from the input stream.
+     * 从输入流中读取流式对象的内部状态
      *
      * @param out
      *

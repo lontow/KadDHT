@@ -9,7 +9,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
- * A Message used to send content between nodes
+ * 内容消息
  *
  * @author Lontow
  * @since 20201020

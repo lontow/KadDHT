@@ -9,7 +9,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 /**
- * Handles creating messages and receivers
+ * 消息工厂的实现
  *
  * @author Lontow
  * @since 20201020

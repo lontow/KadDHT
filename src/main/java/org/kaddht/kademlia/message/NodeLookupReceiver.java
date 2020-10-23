@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Receives a NodeLookupMessage and sends a NodeReplyMessage as reply with the K-Closest nodes to the ID sent.
+ * 接受 NodeLookupMessage 和 回复 NodeReplyMessage
  *
  * @author Lontow
  * @created 20140219
@@ -29,8 +29,8 @@ public class NodeLookupReceiver implements Receiver
     }
 
     /**
-     * Handle receiving a NodeLookupMessage
-     * Find the set of K nodes closest to the lookup ID and return them
+     * 处理 NodeLookupMessage
+     *
      *
      * @param comm
      *
@@ -43,24 +43,24 @@ public class NodeLookupReceiver implements Receiver
 
         Node origin = msg.getOrigin();
 
-        /* Update the local space by inserting the origin node. */
+        /* 将发送请求的节点加入路由表 */
         this.localNode.getRoutingTable().insert(origin);
 
-        /* Find nodes closest to the LookupId */
+        /* 找到距 LookupId 最近的 k个节点*/
         List<Node> nodes = this.localNode.getRoutingTable().findClosest(msg.getLookupId(), this.config.k());
 
-        /* Respond to the NodeLookupMessage */
+        /* 回复消息 */
         Message reply = new NodeReplyMessage(this.localNode.getNode(), nodes);
 
         if (this.server.isRunning())
         {
-            /* Let the Server send the reply */
+            /* 回复 */
             this.server.reply(origin, reply, comm);
         }
     }
 
     /**
-     * We don't need to do anything here
+     * 超时函数
      *
      * @param comm
      *

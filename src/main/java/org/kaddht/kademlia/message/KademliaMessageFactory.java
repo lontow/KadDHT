@@ -6,7 +6,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 /**
- * A factory that handles creating messages and receivers
+ * 消息工厂，用于处理消息的发送和接受
  *
  * @author Lontow
  * @since 20201020
@@ -15,21 +15,21 @@ public interface KademliaMessageFactory
 {
 
     /**
-     * Method that creates a message based on the code and input stream
+     * 创建消息
      *
-     * @param code The message code
-     * @param in   An input stream with the message data
+     * @param code 消息码
+     * @param in   输入流
      *
-     * @return A message
+     * @return 消息对象
      *
      * @throws java.io.IOException
      */
     public Message createMessage(byte code, DataInputStream in) throws IOException;
 
     /**
-     * Method that returns a receiver to handle a specific type of message
+     * 返回一个处理消息的 Receiver
      *
-     * @param code   The message code
+     * @param code   消息码
      * @param server
      *
      * @return A receiver

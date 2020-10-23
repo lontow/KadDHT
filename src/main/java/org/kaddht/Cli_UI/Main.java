@@ -1,6 +1,7 @@
 package org.kaddht.Cli_UI;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -18,6 +19,7 @@ import com.google.gson.stream.JsonReader;
 
 import org.kaddht.kademlia.DefaultConfiguration;
 import org.kaddht.kademlia.KadPeer;
+import org.kaddht.kademlia.exceptions.RoutingException;
 import org.kaddht.kademlia.node.KademliaId;
 import org.kaddht.kademlia.node.Node;
 
@@ -48,9 +50,10 @@ public class Main {
                 //System.out.println(kad1.getRoutingTable());
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            if(e instanceof FileNotFoundException)
             System.out.println("configFile is not exists");
+            else if(e instanceof RoutingException)
+                e.printStackTrace();
             System.exit(0);
         }
 
