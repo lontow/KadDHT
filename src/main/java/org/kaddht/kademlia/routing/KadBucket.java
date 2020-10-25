@@ -256,14 +256,18 @@ public class KadBucket implements KademliaBucket
     {
         StringBuilder sb = new StringBuilder("Bucket at depth: ");
         sb.append(this.depth);
-        sb.append("\n Nodes: \n");
+        int i = 0;
+        sb.append("\nNodes:                    NodeId                  stales\n");
         for (Contact n : this.contacts)
         {
-            sb.append("Node: ");
+            sb.append("Node");
+            sb.append(++i);
+            sb.append(":  ");
             sb.append(n.getNode().getNodeId().toString());
-            sb.append(" (stale: ");
+//            sb.append(" (stale: ");
+            sb.append("    ");
             sb.append(n.staleCount());
-            sb.append(")");
+//            sb.append(")");
             sb.append("\n");
         }
 

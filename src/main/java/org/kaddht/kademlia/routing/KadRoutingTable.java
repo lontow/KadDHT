@@ -167,7 +167,7 @@ public class KadRoutingTable implements KademliaRoutingTable
     @Override
     public synchronized final String toString()
     {
-        StringBuilder sb = new StringBuilder("\nPrinting Routing Table Started ***************** \n");
+        StringBuilder sb = new StringBuilder("\n***************** Printing Routing Table Started ***************** \n\n");
         int totalContacts = 0;
         for (KademliaBucket b : this.buckets)
         {
@@ -176,7 +176,7 @@ public class KadRoutingTable implements KademliaRoutingTable
                 totalContacts += b.numContacts();
                 sb.append("# nodes in Bucket with depth ");
                 sb.append(b.getDepth());
-                sb.append(": ");
+                sb.append(" : ");
                 sb.append(b.numContacts());
                 sb.append("\n");
                 sb.append(b.toString());
@@ -184,11 +184,11 @@ public class KadRoutingTable implements KademliaRoutingTable
             }
         }
 
-        sb.append("\nTotal Contacts: ");
+        sb.append("Total Contacts: ");
         sb.append(totalContacts);
         sb.append("\n\n");
 
-        sb.append("Printing Routing Table Ended ******************** ");
+        sb.append("***************** Printing Routing Table Ended ***************** ");
 
         return sb.toString();
     }

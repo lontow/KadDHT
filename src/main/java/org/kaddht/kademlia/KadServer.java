@@ -24,7 +24,7 @@ import org.kaddht.kademlia.message.Receiver;
  * 收发　message
  *
  * @author Lontow
- * @created 20140215
+ * @created 20201015
  */
 public class KadServer
 {

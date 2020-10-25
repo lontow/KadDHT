@@ -101,6 +101,7 @@ public class NodeLookupOperation implements Operation, Receiver
                 {
                     wait(timeInterval);
                     totalTimeWaited += timeInterval;
+
                 }
                 else
                 {
