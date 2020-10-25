@@ -29,9 +29,9 @@ public class ContentSendingTest
             KadPeer kad2 = new KadPeer("Crystal", new KademliaId("ASERTKJDHGVHERJHGFLK"), 7572);
             System.out.println("Created Node Kad 2: " + kad2.getNode().getNodeId());
             KadPeer kad3 = new KadPeer("Shameer", new KademliaId("AS84k67894758456746A"), 8104);
-            kad2.bootstrap(kad1.getNode());
+            kad2.connect(kad1.getNode());
             System.out.println("Created Node Kad 3: " + kad3.getNode().getNodeId());
-            kad3.bootstrap(kad1.getNode());
+            kad3.connect(kad1.getNode());
 
             /**
              * Lets create the content and share it
@@ -49,7 +49,7 @@ public class ContentSendingTest
             kad2.shutdown(true);
             kad1.shutdown(true);
             kad1 = KadPeer.loadFromFile("JoshuaK");
-            kad1.bootstrap(kad3.getNode());
+            kad1.connect(kad3.getNode());
             /**
              * Lets retrieve the content
              */

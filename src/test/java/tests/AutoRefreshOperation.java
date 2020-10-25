@@ -31,10 +31,10 @@ public class AutoRefreshOperation implements Simulation
 
             /* Connecting nodes */
             System.out.println("Connecting Nodes");
-            kad2.bootstrap(kad1.getNode());
-            kad3.bootstrap(kad2.getNode());
-            kad4.bootstrap(kad2.getNode());
-            kad5.bootstrap(kad4.getNode());
+            kad2.connect(kad1.getNode());
+            kad3.connect(kad2.getNode());
+            kad4.connect(kad2.getNode());
+            kad5.connect(kad4.getNode());
 
             DHTContentImpl c = new DHTContentImpl(new KademliaId("AS84k678947584567465"), kad1.getOwnerId());
             c.setData("Setting the data");

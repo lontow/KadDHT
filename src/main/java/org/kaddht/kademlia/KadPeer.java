@@ -209,7 +209,7 @@ public class KadPeer implements KademliaNode
     }
 
     @Override
-    public synchronized final void bootstrap(Node n) throws IOException, RoutingException
+    public synchronized final void connect(Node n) throws IOException, RoutingException
     {
         long startTime = System.nanoTime();
         Operation op = new ConnectOperation(this.server, this, n, this.config);
@@ -291,7 +291,6 @@ public class KadPeer implements KademliaNode
     public void shutdown(final boolean saveState) throws IOException
     {
         this.server.shutdown();
-
         this.stopRefreshOperation();
 
         /* 保存 */

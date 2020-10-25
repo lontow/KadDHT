@@ -26,7 +26,7 @@ public class SaveStateTest2
 
             /* Connecting 2 to 1 */
             System.out.println("Connecting Nodes 1 & 2");
-            kad2.bootstrap(kad1.getNode());
+            kad2.connect(kad1.getNode());
             //System.out.println(kad1);
             //System.out.println(kad2);
 
@@ -49,7 +49,7 @@ public class SaveStateTest2
 
             System.out.println("\n\n\nReloading Kad instance from file");
             kad1 = KadPeer.loadFromFile("JoshuaK");
-            kad1.bootstrap(kad2.getNode());
+            kad1.connect(kad2.getNode());
             System.out.println(kad2);
 
             /* Trying to get a content stored on the restored node */
@@ -63,7 +63,7 @@ public class SaveStateTest2
 
             KadPeer kad3 = new KadPeer("Shameer", new KademliaId("AS84k67894758456746A"), 8104);
             System.out.println("Created Node Kad 3: " + kad3.getNode().getNodeId());
-            kad3.bootstrap(kad1.getNode());
+            kad3.connect(kad1.getNode());
         }
 
         catch (Exception e)

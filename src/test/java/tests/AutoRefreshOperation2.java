@@ -29,8 +29,8 @@ public class AutoRefreshOperation2 implements tests.Simulation
 
             /* Connecting nodes */
             System.out.println("Connecting Nodes");
-            kad2.bootstrap(kad1.getNode());
-            kad3.bootstrap(kad2.getNode());
+            kad2.connect(kad1.getNode());
+            kad3.connect(kad2.getNode());
 
             DHTContentImpl c = new DHTContentImpl(new KademliaId("AS84k678947584567465"), kad1.getOwnerId());
             c.setData("Setting the data");
@@ -69,5 +69,9 @@ public class AutoRefreshOperation2 implements tests.Simulation
         {
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) {
+        new AutoRefreshOperation2().runSimulation();
     }
 }

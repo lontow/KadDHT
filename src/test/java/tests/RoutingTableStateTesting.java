@@ -18,7 +18,7 @@ public class RoutingTableStateTesting
 
     KadPeer[] kads;
 
-    public int numKads = 10;
+    public int numKads = 5;
 
     public RoutingTableStateTesting()
     {
@@ -32,15 +32,10 @@ public class RoutingTableStateTesting
             kads[2] = new KadPeer("user2", new KademliaId("AFG45678947584567462"), 4585);
             kads[3] = new KadPeer("user3", new KademliaId("FSF45J38947584567463"), 8104);
             kads[4] = new KadPeer("user4", new KademliaId("ASF45678947584567464"), 8335);
-            kads[5] = new KadPeer("user5", new KademliaId("GHF4567894DR84567465"), 13345);
-            kads[6] = new KadPeer("user6", new KademliaId("ASF45678947584567466"), 12049);
-            kads[7] = new KadPeer("user7", new KademliaId("AE345678947584567467"), 14585);
-            kads[8] = new KadPeer("user8", new KademliaId("ASAA5678947584567468"), 18104);
-            kads[9] = new KadPeer("user9", new KademliaId("ASF456789475845674U9"), 18335);
 
             for (int i = 1; i < numKads; i++)
             {
-                kads[i].bootstrap(kads[0].getNode());
+                kads[i].connect(kads[0].getNode());
             }
 
             /* Lets shut down a node and then try putting a content on the network. We'll then see how the un-responsive contacts work */
@@ -72,6 +67,7 @@ public class RoutingTableStateTesting
     {
         try
         {
+            kad.refresh();
             kad.shutdown(false);
         }
         catch (IOException ex)

@@ -27,7 +27,7 @@ public class ContentUpdatingTest
             System.out.println("Created Node Kad 1: " + kad1.getNode().getNodeId());
             KadPeer kad2 = new KadPeer("Crystal", new KademliaId("ASERTKJDHGVHERJHGFLK"), 7572);
             System.out.println("Created Node Kad 2: " + kad2.getNode().getNodeId());
-            kad2.bootstrap(kad1.getNode());
+            kad2.connect(kad1.getNode());
 
             /* Lets create the content and share it */
             DHTContentImpl c = new DHTContentImpl(kad2.getOwnerId(), "Some Data");

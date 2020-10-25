@@ -21,11 +21,70 @@ import org.kaddht.kademlia.util.fileutil.LocalFileReader;
 import org.kaddht.kademlia.util.fileutil.LocalFileWriter;
 
 
+class Shutdown extends Exec{
+
+    boolean save=false;
+    @Override
+    void run() {
+        try {
+            kad.shutdown(save);
+        }catch (Exception e){
+
+        }
+    }
+
+    @Override
+    void usage() {
+        System.out.println("shutdown true   保存状态");
+        System.out.println("shutdown false  不保存状态");
+    }
+
+    @Override
+    void setArgs(String[] args) {
+        if(args.length!=2) {
+            usage();
+            return;
+        }
+        if(args[1].equals("true")) save=true;
+        else if (args[1].equals("false"))  save=false;
+        else {
+            usage();
+        }
+    }
+}
+
+class Restart extends Exec{
+
+    @Override
+    void run() {
+        try{
+            KadPeer.loadFromFile(kad.getOwnerId());
+            System.out.println("restart "+kad.getOwnerId());
+        }catch (IOException | ClassNotFoundException e){
+
+        }
+    }
+
+    @Override
+    void usage() {
+        System.out.println("restart");
+    }
+
+    @Override
+    void setArgs(String[] args) {
+
+    }
+}
 class Exit extends Exec{
 
     @Override
     public void run() {
         // TODO Auto-generated method stub
+        try {
+            kad.shutdown(false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         System.exit(0);
     }
 
@@ -156,6 +215,8 @@ public class Shell {
         Command.register("showroute", new ShowRoute());
         Command.register("put", new Put());
         Command.register("get", new Get());
+        Command.register("shutdown", new Shutdown());
+        Command.register("restart", new Restart());
     }
     public void run() throws IOException {
         init();
