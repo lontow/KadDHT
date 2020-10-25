@@ -50,7 +50,7 @@ public class Main {
                 Node tracker=new Node(new KademliaId(config.tracker.kadid),
                         InetAddress.getByName(config.tracker.address),
                         config.tracker.udpport);
-                kad1.bootstrap(tracker);
+                kad1.connect(tracker);
                 System.out.println("Connected to tracker : " + tracker.getSocketAddress());
                 // 输出kad1.getRoutingTable()
             }

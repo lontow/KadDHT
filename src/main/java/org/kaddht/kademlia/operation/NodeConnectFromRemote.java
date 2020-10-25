@@ -16,7 +16,7 @@ public class NodeConnectFromRemote {
 public static void main(String[] args) throws IOException, NoSuchElementException, ContentNotFoundException {
 	KadPeer kad = new KadPeer("Lontow2", new KademliaId("ASERTK85OLKMN85FR455"), 7900);
 	System.out.println(InetAddress.getLocalHost());
-	kad.bootstrap(new Node(new KademliaId("ASF45678947584567467"), InetAddress.getByName("hg1"), 9999));
+	kad.connect(new Node(new KademliaId("ASF45678947584567467"), InetAddress.getByName("hg1"), 9999));
 	System.out.println(kad.getRoutingTable());
 	System.out.println(InetAddress.getByName("hg1"));
 	

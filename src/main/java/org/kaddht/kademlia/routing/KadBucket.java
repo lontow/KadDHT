@@ -58,7 +58,7 @@ public class KadBucket implements KademliaBucket
         }
         else
         {
-            /* 若　Bucket 满了，放入缓存 */
+            /* 若　Buckets 满了，放入缓存 */
             if (contacts.size() >= this.config.k())
             {
                 /* 查看过期时间最长的 */
@@ -135,7 +135,11 @@ public class KadBucket implements KademliaBucket
         else
         {
             /* 缓存中无，记录过期 */
-            this.getFromContacts(c.getNode()).incrementStaleCount();
+            Contact t=this.getFromContacts(c.getNode());
+            t.incrementStaleCount();
+            if(t.staleCount()>config.stale()){
+                this.contacts.remove(c);
+            }
         }
 
         return true;
@@ -151,7 +155,7 @@ public class KadBucket implements KademliaBucket
             }
         }
 
-        /* This contact does not exist */
+        /*  contact不存在  */
         throw new NoSuchElementException("The contact does not exist in the contacts list.");
     }
 
@@ -166,7 +170,7 @@ public class KadBucket implements KademliaBucket
             }
         }
 
-        /* We got here means this element does not exist */
+        /* 缓存中无该Node */
         throw new NoSuchElementException("Node does not exist in the replacement cache. ");
     }
 
@@ -193,13 +197,13 @@ public class KadBucket implements KademliaBucket
     {
         final ArrayList<Contact> ret = new ArrayList<>();
 
-        /* If we have no contacts, return the blank arraylist */
+
         if (this.contacts.isEmpty())
         {
             return ret;
         }
 
-        /* We have contacts, lets copy put them into the arraylist and return */
+
         for (Contact c : this.contacts)
         {
             ret.add(c);
@@ -209,24 +213,20 @@ public class KadBucket implements KademliaBucket
     }
 
     /**
-     * When the bucket is filled, we keep extra contacts in the replacement cache.
+     * 加入缓存
      */
     private synchronized void insertIntoReplacementCache(Contact c)
     {
-        /* Just return if this contact is already in our replacement cache */
         if (this.replacementCache.contains(c))
         {
-            /**
-             * If the contact is already in the bucket, lets update that we've seen it
-             * We need to remove and re-add the contact to get the Sorted Set to update sort order
-             */
+
             Contact tmp = this.removeFromReplacementCache(c.getNode());
             tmp.setSeenNow();
             this.replacementCache.add(tmp);
         }
         else if (this.replacementCache.size() > this.config.k())
         {
-            /* if our cache is filled, we remove the least recently seen contact */
+
             this.replacementCache.remove(this.replacementCache.last());
             this.replacementCache.add(c);
         }
@@ -247,7 +247,6 @@ public class KadBucket implements KademliaBucket
             }
         }
 
-        /* We got here means this element does not exist */
         throw new NoSuchElementException("Node does not exist in the replacement cache. ");
     }
 

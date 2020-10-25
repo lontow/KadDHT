@@ -60,7 +60,7 @@ public interface KademliaNode
      * @throws IOException           发生网络错误
      * @throws IllegalStateException 此对象关闭
      * */
-    public void bootstrap(Node n) throws IOException, RoutingException;
+    public void connect(Node n) throws IOException, RoutingException;
 
     /**
      * 在给定的 key 下存储指定的值

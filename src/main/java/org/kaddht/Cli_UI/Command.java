@@ -33,6 +33,10 @@ public class Command{
         }
         String[] args = Pattern.compile(" ").split(line);
         Exec exec=commands.get(args[0]).setKad(kad);
+        if(exec==null) {
+            System.out.println("未知命令");
+            return;
+        }
         exec.setArgs(args);
         exec.run();
     }

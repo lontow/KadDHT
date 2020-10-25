@@ -31,6 +31,7 @@ public class DefaultConfiguration implements KadConfiguration
     private   String LOCAL_FOLDER = "test";
 
     private final static boolean IS_TESTING = true;
+    public static boolean savestatus=false;
     private static DefaultConfiguration config=null;
     public static synchronized DefaultConfiguration getInstance(){
         if(config==null){
