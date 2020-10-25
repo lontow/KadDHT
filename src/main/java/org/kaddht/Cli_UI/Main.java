@@ -44,7 +44,11 @@ public class Main {
             DefaultConfiguration.setConfig(config.system);
             System.out.println(" \tdefault directory:" + DefaultConfiguration.getInstance().getDirPath());
             System.out.println(config.system);
-
+            File f = new File(DefaultConfiguration.getInstance().getDirPath());
+            if(!f.exists()){
+                f.mkdirs();
+                    //创建目录
+            }
 
             if(config.tracker!=null){
                 Node tracker=new Node(new KademliaId(config.tracker.kadid),
