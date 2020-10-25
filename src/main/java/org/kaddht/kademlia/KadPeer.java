@@ -164,19 +164,19 @@ public class KadPeer implements KademliaNode
     {
         DataInputStream din;
 
-
+        System.out.println("Recovering KadPeer");
         din = new DataInputStream(new FileInputStream(getStateStorageFolderName(ownerId, iconfig) + File.separator + "kad.kns"));
         KadPeer ikad = new JsonSerializer<KadPeer>().read(din);
 
-
+        System.out.println("Recovering RouteTable");
         din = new DataInputStream(new FileInputStream(getStateStorageFolderName(ownerId, iconfig) + File.separator + "routingtable.kns"));
         KademliaRoutingTable irtbl = new JsonRoutingTableSerializer(iconfig).read(din);
 
-
+        System.out.println("Recovering Node");
         din = new DataInputStream(new FileInputStream(getStateStorageFolderName(ownerId, iconfig) + File.separator + "node.kns"));
         Node inode = new JsonSerializer<Node>().read(din);
 
-
+        System.out.println("Recovering DHT");
         din = new DataInputStream(new FileInputStream(getStateStorageFolderName(ownerId, iconfig) + File.separator + "dht.kns"));
         KademliaDHT idht = new JsonDHTSerializer().read(din);
         idht.setConfiguration(iconfig);
@@ -258,12 +258,15 @@ public class KadPeer implements KademliaNode
         if (this.dht.contains(param))
         {
            //本地有保存
+            System.out.println("已保存");
             return this.dht.get(param);
         }
 
         long startTime = System.nanoTime();
+        System.out.println("开始查找");
         ContentLookupOperation clo = new ContentLookupOperation(server, this, param, this.config);
         clo.execute();
+        System.out.println("查找完成");
         long endTime = System.nanoTime();
         this.statistician.addContentLookup(endTime - startTime, clo.routeLength(), clo.isContentFound());
         return clo.getContentFound();

@@ -30,20 +30,21 @@ import org.kaddht.kademlia.node.Node;
 
 public class Main {
     private static KadPeer kad1=null;
+    public static Config config=null;
     static void  parserConfig(String path) {
         System.out.println(path);
         File configfile = new File(path);
         Gson gson = new Gson();
         try {
             JsonReader jsonReader = new JsonReader(new FileReader(configfile));
-            Config config=gson.fromJson(jsonReader, Config.class);
+            config=gson.fromJson(jsonReader, Config.class);
+            DefaultConfiguration.setConfig(config.system);
              kad1 = new KadPeer(config.localnode.ownerid, new KademliaId(config.localnode.kadid), config.localnode.udpport);
             System.out.println("Created Node Kad : ");
             System.out.println( " \tat "+kad1.getNode().getSocketAddress());
             System.out.println( " \tkadid: "+kad1.getNode().getNodeId().getKadId());
-            DefaultConfiguration.setConfig(config.system);
             System.out.println(" \tdefault directory:" + DefaultConfiguration.getInstance().getDirPath());
-            System.out.println(config.system);
+
             File f = new File(DefaultConfiguration.getInstance().getDirPath());
             if(!f.exists()){
                 f.mkdirs();

@@ -5,9 +5,13 @@ package org.kaddht.Cli_UI;
  * @create 2020-10-20
  */
 
+import java.io.FileReader;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 
+import com.google.gson.stream.JsonReader;
 import org.jline.reader.EndOfFileException;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
@@ -17,10 +21,40 @@ import org.jline.terminal.TerminalBuilder;
 import org.kaddht.kademlia.KadPeer;
 import org.kaddht.kademlia.dht.KadStorageEntry;
 import org.kaddht.kademlia.dht.DHTContentImpl;
+import org.kaddht.kademlia.node.KademliaId;
+import org.kaddht.kademlia.node.Node;
 import org.kaddht.kademlia.util.fileutil.LocalFileReader;
 import org.kaddht.kademlia.util.fileutil.LocalFileWriter;
 
 
+class Connect extends  Exec{
+
+    @Override
+    void run() {
+
+        Node tracker= null;
+        try {
+            tracker = new Node(new KademliaId(Main.config.tracker.kadid),
+                    InetAddress.getByName(Main.config.tracker.address),
+                    Main.config.tracker.udpport);
+            kad.connect(tracker);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Connected to tracker : " + tracker.getSocketAddress());
+    }
+
+    @Override
+    void usage() {
+        System.out.println("exit");
+    }
+
+    @Override
+    void setArgs(String[] args) {
+
+    }
+}
 class Shutdown extends Exec{
 
     boolean save=false;
@@ -58,7 +92,9 @@ class Restart extends Exec{
     @Override
     void run() {
         try{
-            KadPeer.loadFromFile(kad.getOwnerId());
+            System.out.println("restarting");
+            kad=KadPeer.loadFromFile(kad.getOwnerId());
+            new Connect().run();
             System.out.println("restart "+kad.getOwnerId());
         }catch (IOException | ClassNotFoundException e){
 
@@ -149,12 +185,15 @@ class Get extends Exec{
     @Override
     public void run() {
         // TODO Auto-generated method stub
+        System.out.println(key);
         if(key==null) {
             return;
         }
         try {
             KadStorageEntry entry=kad.get(key);
+            //System.out.println(entry);
             String content= new DHTContentImpl().fromSerializedForm(entry.getContent()).getData();
+            //System.out.println(content);
             LocalFileWriter.write(content);
         }catch (Exception e) {
         }
@@ -217,6 +256,7 @@ public class Shell {
         Command.register("get", new Get());
         Command.register("shutdown", new Shutdown());
         Command.register("restart", new Restart());
+        Command.register("connect", new Connect());
     }
     public void run() throws IOException {
         init();

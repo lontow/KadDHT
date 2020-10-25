@@ -13,20 +13,20 @@ public class DefaultConfiguration implements KadConfiguration
 {
 
     @SerializedName("restore_interval")
-    private   long RESTORE_INTERVAL = 60 * 1000;
+    private   static long RESTORE_INTERVAL = 60 * 1000;
         // 以毫秒为单位
 
     @SerializedName("response_timeout")
-    private   long RESPONSE_TIMEOUT = 2000;
+    private   static long RESPONSE_TIMEOUT = 2000;
     @SerializedName("operation_timeout")
-    private   long OPERATION_TIMEOUT = 2000;
+    private   static long OPERATION_TIMEOUT = 2000;
     @SerializedName("concurrency")
-    private   int CONCURRENCY = 10;
+    private   static int CONCURRENCY = 10;
     private final static int K = 5;
     @SerializedName("rcsize")
-    private   int RCSIZE = 3;
+    private   static int RCSIZE = 3;
     @SerializedName("stale")
-    private   int STALE = 1;
+    private   static int STALE = 1;
     @SerializedName("default_folder")
     private   String LOCAL_FOLDER = "test";
 
@@ -94,7 +94,8 @@ public class DefaultConfiguration implements KadConfiguration
     public String getNodeDataFolder(String ownerId)
     {
         // 设置主存储文件夹（如果其不存在）
-        String path = System.getProperty("user.home") + File.separator + getLOCAL_FOLDER();
+        String path = DefaultConfiguration.getInstance().getDirPath();
+        //System.out.println("getNodeDataFolder:"+path);
         File folder = new File(path);
         if (!folder.isDirectory())
         {

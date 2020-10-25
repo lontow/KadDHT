@@ -322,6 +322,7 @@ public class ContentLookupOperation implements Operation, Receiver
         }
         else
         {
+            System.out.println("文件未找到");
             throw new ContentNotFoundException("No Value was found for the given key.");
         }
     }

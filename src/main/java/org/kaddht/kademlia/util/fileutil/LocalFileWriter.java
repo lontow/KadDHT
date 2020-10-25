@@ -17,7 +17,7 @@ public class LocalFileWriter {
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fis, "utf-8"), 5 * 1024 * 1024);// 用5M的缓冲读取文本文
             writer.write(txtFile.data);
             writer.close();
-            System.out.println("LocalWriter:"+txtFile.data);
+            System.out.println("LocalWriter:\n"+txtFile.data);
         }catch (IOException e){
             e.printStackTrace();
         }

@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.regex.Pattern;
 
 abstract class Exec {
-    protected KadPeer kad=null;
+    protected static KadPeer kad=null;
     abstract  void run();
     abstract void usage();
     public Exec setKad(KadPeer kad) {
@@ -32,11 +32,13 @@ public class Command{
             return;
         }
         String[] args = Pattern.compile(" ").split(line);
-        Exec exec=commands.get(args[0]).setKad(kad);
+
+        Exec exec=commands.get(args[0]);
         if(exec==null) {
             System.out.println("未知命令");
             return;
         }
+        exec.setKad(kad);
         exec.setArgs(args);
         exec.run();
     }
