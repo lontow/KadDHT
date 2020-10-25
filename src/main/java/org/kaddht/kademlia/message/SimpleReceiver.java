@@ -6,7 +6,7 @@ import java.io.IOException;
  *默认　Receiver
  *
  * @author Lontow
- * @created 20140202
+ * @created 20201015
  */
 public class SimpleReceiver implements Receiver
 {

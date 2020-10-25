@@ -8,7 +8,7 @@ import org.kaddht.kademlia.node.KademliaId;
  * Testing connecting 2 nodes to each other
  *
  * @author Lontow
- * @created 20140219
+ * @created 20201015
  */
 public class
 NodeConnectionTest

@@ -7,7 +7,7 @@ import org.kaddht.kademlia.node.Node;
  *
  *
  * @author Lontow
- * @created 20140215
+ * @created 20201015
  */
 public interface KademliaBucket
 {

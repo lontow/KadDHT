@@ -6,7 +6,7 @@ import java.io.IOException;
  * 路由异常
  *
  * @author Lontow
- * @created 20140219
+ * @created 20201015
  */
 public class RoutingException extends IOException
 {

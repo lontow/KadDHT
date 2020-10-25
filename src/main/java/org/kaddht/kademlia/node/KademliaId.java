@@ -1,6 +1,6 @@
 /**
  * @author Lontow
- * @created 20140215
+ * @created 20201015
  * @desc kadID
  */
 package org.kaddht.kademlia.node;

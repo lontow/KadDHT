@@ -12,7 +12,7 @@ import java.util.List;
  * 接受 NodeLookupMessage 和 回复 NodeReplyMessage
  *
  * @author Lontow
- * @created 20140219
+ * @created 20201015
  */
 public class NodeLookupReceiver implements Receiver
 {

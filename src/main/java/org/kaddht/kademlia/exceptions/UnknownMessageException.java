@@ -4,7 +4,7 @@ package org.kaddht.kademlia.exceptions;
  * 未知的消息类型
  *
  * @author Lontow
- * @created 20140219
+ * @created 20201015
  */
 public class UnknownMessageException extends RuntimeException
 {

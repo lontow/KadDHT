@@ -222,11 +222,11 @@ public class KadPeer implements KademliaNode
     public int put(KadContent content) throws IOException
     {
         GetParameter gp= new GetParameter(content.getKey(),content.getType(),content.getOwnerId());
-        System.out.println("put:gp"+gp);
+        //System.out.println("put:gp"+gp);
         byte[] json=new Gson().toJson(gp).getBytes();
         ;
         System.out.println("put:"+Base64.encode(json)+"\n you can get file using this key!");
-        System.out.println(new String(json));
+        //System.out.println(new String(json));
         return this.put(new KadStorageEntry(content));
     }
     @Override
@@ -249,7 +249,7 @@ public class KadPeer implements KademliaNode
     public KadStorageEntry get(String cipher) throws IOException, ContentNotFoundException {
             byte[] decoded= Base64.decode(cipher);
             GetParameter gp=new Gson().fromJson(new String(decoded),GetParameter.class);
-            System.out.println("get:gp"+new String(decoded));
+            //System.out.println("get:gp"+new String(decoded));
             return this.get(gp);
     }
     @Override
@@ -292,6 +292,7 @@ public class KadPeer implements KademliaNode
     {
         this.server.shutdown();
         this.stopRefreshOperation();
+        DefaultConfiguration.savestatus=saveState;
 
         /* 保存 */
         if (saveState)

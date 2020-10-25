@@ -4,7 +4,7 @@ package org.kaddht.kademlia.exceptions;
  * KadServer 服务异常
  *
  * @author Lontow
- * @created 20140428
+ * @created 20201015
  */
 public class KadServerDownException extends RoutingException
 {

@@ -12,7 +12,7 @@ import org.kaddht.kademlia.node.KademliaId;
  *路由表实现
  *
  * @author Lontow
- * @created 20140215
+ * @created 20201015
  */
 public class KadRoutingTable implements KademliaRoutingTable
 {

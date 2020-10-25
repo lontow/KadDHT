@@ -9,7 +9,7 @@ import java.io.IOException;
  * 连接和确认
  *
  * @author Lontow
- * @created 20140219
+ * @created 20201015
  */
 public class ConnectReceiver implements Receiver
 {
